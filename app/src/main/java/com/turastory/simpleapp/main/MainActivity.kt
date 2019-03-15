@@ -6,12 +6,9 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import com.turastory.simpleapp.R
+import com.turastory.simpleapp.network.doOnSuccess
 import com.turastory.simpleapp.network.postApi
-import com.turastory.simpleapp.vo.Post
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,30 +43,20 @@ class MainActivity : AppCompatActivity() {
     private fun makeRequest(start: Int) {
         postApi()
             .getPosts(start, POST_LOAD_LIMIT)
-            .enqueue(object : Callback<List<Post>> {
-                override fun onFailure(call: Call<List<Post>>, t: Throwable) {
-                    Log.e(TAG, "Loading posts failed.")
-                }
+            .doOnSuccess {
+                if (it.isNotEmpty()) {
+                    postAdapter.loadPosts(it)
 
-                override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {
-                    if (response.isSuccessful) {
-                        response.body()?.let {
-                            if (it.isNotEmpty()) {
-                                postAdapter.loadPosts(it)
-
-                                // For initial load, scroll up to prevent weirdly going down.
-                                if (start == 0)
-                                    content_list.scrollToPosition(0)
-                            } else {
-                                postAdapter.hideLoadingBar()
-                            }
-                        } ?: run {
-                            Log.e(TAG, "posts are not loaded")
-                        }
-                    } else {
-                        Log.e(TAG, "response is not successful")
-                    }
+                    // For initial load, scroll up to prevent weirdly going down.
+                    if (start == 0)
+                        content_list.scrollToPosition(0)
+                } else {
+                    postAdapter.hideLoadingBar()
                 }
-            })
+            }
+            .doOnFailed {
+                Log.e(TAG, "Error while loading posts - $it")
+            }
+            .done()
     }
 }
