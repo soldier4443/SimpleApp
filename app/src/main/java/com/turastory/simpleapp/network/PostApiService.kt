@@ -1,5 +1,6 @@
 package com.turastory.simpleapp.network
 
+import com.turastory.simpleapp.vo.Comment
 import com.turastory.simpleapp.vo.Post
 import retrofit2.Call
 import retrofit2.http.GET
@@ -17,4 +18,9 @@ interface PostApiService {
     fun getPost(
         @Path("postId") postId: Int
     ): Call<Post>
+
+    @GET("posts/{postId}/comments")
+    fun getComments(
+        @Query("postId") postId: Int
+    ): Call<List<Comment>>
 }
