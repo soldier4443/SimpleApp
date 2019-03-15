@@ -1,4 +1,4 @@
-package com.turastory.simpleapp.main
+package com.turastory.simpleapp.ui.main
 
 import com.turastory.simpleapp.vo.Post
 

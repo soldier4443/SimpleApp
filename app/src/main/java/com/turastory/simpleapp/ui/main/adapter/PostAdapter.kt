@@ -1,10 +1,10 @@
-package com.turastory.simpleapp.main.adapter
+package com.turastory.simpleapp.ui.main.adapter
 
 import android.support.v4.util.SparseArrayCompat
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import com.turastory.simpleapp.main.adapter.delegate.LoadingDelegateAdapter
-import com.turastory.simpleapp.main.adapter.delegate.PostDelegateAdapter
+import com.turastory.simpleapp.ui.main.adapter.delegate.LoadingDelegateAdapter
+import com.turastory.simpleapp.ui.main.adapter.delegate.PostDelegateAdapter
 import com.turastory.simpleapp.util.DelegateViewHolder
 import com.turastory.simpleapp.util.ViewType
 import com.turastory.simpleapp.util.ViewTypeDelegateAdapter

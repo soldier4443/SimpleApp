@@ -1,4 +1,4 @@
-package com.turastory.simpleapp.main.adapter.delegate
+package com.turastory.simpleapp.ui.main.adapter.delegate
 
 import android.view.ViewGroup
 import com.turastory.simpleapp.R

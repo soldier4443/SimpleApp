@@ -1,4 +1,4 @@
-package com.turastory.simpleapp.main
+package com.turastory.simpleapp.ui.main
 
 import android.util.Log
 import com.turastory.simpleapp.network.doOnSuccess

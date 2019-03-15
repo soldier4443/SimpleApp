@@ -1,12 +1,12 @@
-package com.turastory.simpleapp.main
+package com.turastory.simpleapp.ui.main
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import com.turastory.simpleapp.R
-import com.turastory.simpleapp.main.adapter.InfiniteScrollListener
-import com.turastory.simpleapp.main.adapter.PostAdapter
+import com.turastory.simpleapp.ui.main.adapter.InfiniteScrollListener
+import com.turastory.simpleapp.ui.main.adapter.PostAdapter
 import com.turastory.simpleapp.vo.Post
 import kotlinx.android.synthetic.main.activity_main.*
 
