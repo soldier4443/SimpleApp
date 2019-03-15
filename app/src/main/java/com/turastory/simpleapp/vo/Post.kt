@@ -1,6 +1,6 @@
 package com.turastory.simpleapp.vo
 
-import com.turastory.simpleapp.main.ViewType
+import com.turastory.simpleapp.util.ViewType
 
 data class Post(val id: Int,
                 val userId: Int,

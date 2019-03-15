@@ -1,4 +1,4 @@
-package com.turastory.simpleapp.main
+package com.turastory.simpleapp.util
 
 interface ViewType {
     companion object {

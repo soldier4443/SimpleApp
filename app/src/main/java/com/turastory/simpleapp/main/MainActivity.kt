@@ -6,6 +6,8 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import com.turastory.simpleapp.R
+import com.turastory.simpleapp.main.adapter.InfiniteScrollListener
+import com.turastory.simpleapp.main.adapter.PostAdapter
 import com.turastory.simpleapp.network.doOnSuccess
 import com.turastory.simpleapp.network.postApi
 import kotlinx.android.synthetic.main.activity_main.*

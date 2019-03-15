@@ -1,9 +1,9 @@
-package com.turastory.simpleapp.main.delegate
+package com.turastory.simpleapp.main.adapter.delegate
 
 import android.view.ViewGroup
 import com.turastory.simpleapp.R
-import com.turastory.simpleapp.main.ViewType
 import com.turastory.simpleapp.util.DelegateViewHolder
+import com.turastory.simpleapp.util.ViewType
 import com.turastory.simpleapp.util.ViewTypeDelegateAdapter
 
 /**
