@@ -56,6 +56,10 @@ class MainActivity : AppCompatActivity() {
                         response.body()?.let {
                             if (it.isNotEmpty()) {
                                 postAdapter.loadPosts(it)
+
+                                // For initial load, scroll up to prevent weirdly going down.
+                                if (start == 0)
+                                    content_list.scrollToPosition(0)
                             } else {
                                 postAdapter.hideLoadingBar()
                             }
