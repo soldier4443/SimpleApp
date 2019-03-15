@@ -21,11 +21,9 @@ class PostAdapter : RecyclerView.Adapter<DelegateViewHolder>() {
     init {
         delegates.put(ViewType.LOADING, LoadingDelegateAdapter())
         delegates.put(ViewType.CONTENT, PostDelegateAdapter())
-
-        showLoadingBar()
     }
 
-    fun loadPosts(newPosts: List<Post>) {
+    fun showNewPosts(newPosts: List<Post>) {
         // Add new posts
         val start = items.lastIndex
 

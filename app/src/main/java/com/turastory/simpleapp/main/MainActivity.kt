@@ -4,61 +4,58 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import com.turastory.simpleapp.R
 import com.turastory.simpleapp.main.adapter.InfiniteScrollListener
 import com.turastory.simpleapp.main.adapter.PostAdapter
-import com.turastory.simpleapp.network.doOnSuccess
-import com.turastory.simpleapp.network.postApi
+import com.turastory.simpleapp.vo.Post
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainContract.View {
 
-    companion object {
-        const val TAG = "MainActivity"
-        const val POST_LOAD_LIMIT = 10
+    private val postAdapter: PostAdapter = PostAdapter()
+    private val presenter: MainContract.Presenter by lazy {
+        MainPresenter().apply {
+            setView(this@MainActivity)
+        }
     }
-
-    private lateinit var postAdapter: PostAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val linearLayoutManager = LinearLayoutManager(this@MainActivity)
-        postAdapter = PostAdapter()
 
         content_list.apply {
             adapter = postAdapter
             layoutManager = linearLayoutManager
+
             setHasFixedSize(true)
             addItemDecoration(DividerItemDecoration(this@MainActivity, linearLayoutManager.orientation))
+
             addOnScrollListener(InfiniteScrollListener(linearLayoutManager) {
-                this.post { makeRequest(postAdapter.getPostCount()) }
+                this.post { presenter.requestNewPosts() }
             })
         }
 
         // Initial request
-        makeRequest(0)
+        presenter.requestNewPosts()
     }
 
-    private fun makeRequest(start: Int) {
-        postApi()
-            .getPosts(start, POST_LOAD_LIMIT)
-            .doOnSuccess {
-                if (it.isNotEmpty()) {
-                    postAdapter.loadPosts(it)
+    override fun showLoadingBar() {
+        postAdapter.showLoadingBar()
+    }
 
-                    // For initial load, scroll up to prevent weirdly going down.
-                    if (start == 0)
-                        content_list.scrollToPosition(0)
-                } else {
-                    postAdapter.hideLoadingBar()
-                }
-            }
-            .doOnFailed {
-                Log.e(TAG, "Error while loading posts - $it")
-            }
-            .done()
+    override fun hideLoadingBar() {
+        postAdapter.hideLoadingBar()
+    }
+
+    override fun showNewPosts(posts: List<Post>) {
+        val beforeCount = postAdapter.getPostCount()
+
+        postAdapter.showNewPosts(posts)
+
+        // For initial load, scroll up to prevent weirdly going down.
+        if (beforeCount == 0)
+            content_list.scrollToPosition(0)
     }
 }
