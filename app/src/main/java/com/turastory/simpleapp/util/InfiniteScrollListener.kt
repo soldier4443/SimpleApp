@@ -1,4 +1,4 @@
-package com.turastory.simpleapp.ui.main.adapter
+package com.turastory.simpleapp.util
 
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView

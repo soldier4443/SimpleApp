@@ -32,4 +32,8 @@ class MainPresenter : MainContract.Presenter {
             }
             .done()
     }
+
+    override fun onItemClick(pos: Int) {
+        view.openDetailsView(posts[pos].id)
+    }
 }

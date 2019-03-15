@@ -1,12 +1,15 @@
 package com.turastory.simpleapp.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import com.turastory.simpleapp.R
-import com.turastory.simpleapp.ui.main.adapter.InfiniteScrollListener
+import com.turastory.simpleapp.ui.details.DetailsActivity
 import com.turastory.simpleapp.ui.main.adapter.PostAdapter
+import com.turastory.simpleapp.util.InfiniteScrollListener
+import com.turastory.simpleapp.util.RecyclerViewItemClickListener
 import com.turastory.simpleapp.vo.Post
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -35,6 +38,12 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             addOnScrollListener(InfiniteScrollListener(linearLayoutManager) {
                 this.post { presenter.requestNewPosts() }
             })
+
+            addOnItemTouchListener(RecyclerViewItemClickListener(this@MainActivity, this, { _, pos ->
+                if (postAdapter.isNotLoading(pos)) {
+                    presenter.onItemClick(pos)
+                }
+            }))
         }
 
         // Initial request
@@ -57,5 +66,10 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         // For initial load, scroll up to prevent weirdly going down.
         if (beforeCount == 0)
             content_list.scrollToPosition(0)
+    }
+
+    override fun openDetailsView(id: Int) {
+        startActivity(Intent(this, DetailsActivity::class.java)
+            .putExtra("postId", id))
     }
 }

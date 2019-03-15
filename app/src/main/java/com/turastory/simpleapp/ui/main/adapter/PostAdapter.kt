@@ -36,6 +36,10 @@ class PostAdapter : RecyclerView.Adapter<DelegateViewHolder>() {
         return if (isLoadingBarExists()) items.size - 1 else items.size
     }
 
+    fun isNotLoading(pos: Int): Boolean {
+        return items[pos].getViewType() != ViewType.LOADING
+    }
+
     fun hideLoadingBar() {
         // last item should be loading bar
         if (isLoadingBarExists()) {

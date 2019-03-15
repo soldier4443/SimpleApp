@@ -12,10 +12,12 @@ interface MainContract {
         fun showNewPosts(posts: List<Post>)
         fun showLoadingBar()
         fun hideLoadingBar()
+        fun openDetailsView(id: Int)
     }
 
     interface Presenter {
         fun setView(view: View)
         fun requestNewPosts()
+        fun onItemClick(pos: Int)
     }
 }
