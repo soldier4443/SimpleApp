@@ -2,7 +2,6 @@ package com.turastory.simpleapp.main
 
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 
 /**
  * Scroll listener for infinite scroll.
@@ -17,32 +16,19 @@ class InfiniteScrollListener(private val layoutManager: LinearLayoutManager,
 
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
-
-        Log.e(MainActivity.TAG, "dx: [$dx], dy: [$dy], visible item: [${lastItemPosition()}]")
-        Log.e(MainActivity.TAG, "Total Item Count: : ${layoutManager.itemCount}")
-        doWork()
+        checkBottomReached()
     }
 
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         super.onScrollStateChanged(recyclerView, newState)
-
-        fun interpret(state: Int) = when (state) {
-            0 -> "IDLE"
-            1 -> "DRAGGING"
-            2 -> "SETTLING"
-            else -> "NOTHING"
-        }
-
-        Log.e(MainActivity.TAG, "newState: ${interpret(newState)}, visible item: [${lastItemPosition()}]")
-        Log.e(MainActivity.TAG, "Total Item Count: : ${layoutManager.itemCount}")
-        doWork()
+        checkBottomReached()
     }
 
-    private fun doWork() {
+    private fun checkBottomReached() {
         val maxCount = layoutManager.itemCount
 
-        if (maxCount > 0 &&
-            lastItemPosition() == maxCount - 1 &&
+        if (lastItemPosition() == maxCount - 1 &&
+            maxCount > 0 &&
             (System.currentTimeMillis() - lastActiveTime) > activeDelay) {
 
             task()

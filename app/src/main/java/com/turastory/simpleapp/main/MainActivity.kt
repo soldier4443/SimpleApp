@@ -35,15 +35,12 @@ class MainActivity : AppCompatActivity() {
             setHasFixedSize(true)
             addItemDecoration(DividerItemDecoration(this@MainActivity, linearLayoutManager.orientation))
             addOnScrollListener(InfiniteScrollListener(linearLayoutManager) {
-                Log.e(TAG, "Bottom reached. Let's load items!")
                 this.post { makeRequest(postAdapter.getPostCount()) }
             })
         }
 
         // Initial request
         makeRequest(0)
-
-        test_button.setOnClickListener { makeRequest(postAdapter.getPostCount()) }
     }
 
     private fun makeRequest(start: Int) {
@@ -59,10 +56,8 @@ class MainActivity : AppCompatActivity() {
                         response.body()?.let {
                             if (it.isNotEmpty()) {
                                 postAdapter.loadPosts(it)
-                                Log.d(TAG, "posts loaded")
                             } else {
                                 postAdapter.hideLoadingBar()
-                                Log.d(TAG, "hide loading bar")
                             }
                         } ?: run {
                             Log.e(TAG, "posts are not loaded")
