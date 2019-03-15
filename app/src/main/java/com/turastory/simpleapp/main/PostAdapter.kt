@@ -1,46 +1,82 @@
 package com.turastory.simpleapp.main
 
+import android.support.v4.util.SparseArrayCompat
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import com.turastory.simpleapp.R
-import com.turastory.simpleapp.util.BaseViewHolder
+import com.turastory.simpleapp.main.delegate.LoadingDelegateAdapter
+import com.turastory.simpleapp.main.delegate.PostDelegateAdapter
+import com.turastory.simpleapp.util.DelegateViewHolder
+import com.turastory.simpleapp.util.ViewTypeDelegateAdapter
 import com.turastory.simpleapp.vo.Post
-import kotlinx.android.synthetic.main.layout_post.view.*
 
 /**
- * TODO: insertion animation
- * TODO: infinite scroll
+ * Presents the list of posts.
  */
-class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
+class PostAdapter : RecyclerView.Adapter<DelegateViewHolder>() {
 
-    private val posts = mutableListOf<Post>()
+    private val delegates = SparseArrayCompat<ViewTypeDelegateAdapter>()
+    private val items = mutableListOf<ViewType>()
 
-    // All posts are provided from outside.
+    init {
+        delegates.put(ViewType.LOADING, LoadingDelegateAdapter())
+        delegates.put(ViewType.CONTENT, PostDelegateAdapter())
+
+        showLoadingBar()
+    }
+
     fun loadPosts(newPosts: List<Post>) {
-        val start = posts.size
+        // Add new posts
+        val start = items.lastIndex
 
-        posts.addAll(newPosts)
+        items.addAll(start, newPosts)
         notifyItemRangeInserted(start, newPosts.size)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(parent)
+    // Does not count loading bar as an item.
+    fun getPostCount(): Int {
+        return if (isLoadingBarExists()) items.size - 1 else items.size
+    }
+
+    fun hideLoadingBar() {
+        // last item should be loading bar
+        if (isLoadingBarExists()) {
+            val index = items.lastIndex
+
+            items.removeAt(index)
+            notifyItemRemoved(index)
+        }
+    }
+
+    fun showLoadingBar() {
+        if (!isLoadingBarExists()) {
+            items += object : ViewType {
+                override fun getViewType(): Int {
+                    return ViewType.LOADING
+                }
+            }
+
+            notifyItemInserted(items.lastIndex)
+        }
+    }
+
+    private fun isLoadingBarExists(): Boolean =
+        items.lastIndex != -1 && items[items.lastIndex].getViewType() == ViewType.LOADING
+
+    override fun getItemViewType(position: Int): Int {
+        return items[position].getViewType()
     }
 
     override fun getItemCount(): Int {
-        return posts.size
+        return items.size
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(posts[position])
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DelegateViewHolder {
+        return delegates.get(viewType)?.onCreateViewHolder(parent)
+            ?: throw IllegalArgumentException("Invalid viewType")
     }
 
-    class ViewHolder(viewGroup: ViewGroup) : BaseViewHolder(R.layout.layout_post, viewGroup) {
-        fun bind(post: Post) {
-            with(itemView) {
-                post_title.text = post.title
-                post_body.text = post.body
-            }
-        }
+    override fun onBindViewHolder(holder: DelegateViewHolder, position: Int) {
+        val viewType = getItemViewType(position)
+        delegates.get(viewType)?.onBindViewHolder(holder, items[position], position)
     }
 }

@@ -5,10 +5,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:paddingLeft="@dimen/margin_basic"
-  android:paddingTop="@dimen/margin_basic"
-  android:paddingRight="@dimen/margin_basic"
-  android:paddingBottom="@dimen/margin_basic">
+  android:padding="@dimen/margin_basic">
 
   <TextView
     android:id="@+id/post_title"

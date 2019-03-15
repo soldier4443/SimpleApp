@@ -17,44 +17,58 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val TAG = "MainActivity"
+        const val POST_LOAD_LIMIT = 10
     }
 
-    private val postAdapter = PostAdapter()
+    private lateinit var postAdapter: PostAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        content_list.apply {
-            val linearLayoutManager = LinearLayoutManager(this@MainActivity)
+        val linearLayoutManager = LinearLayoutManager(this@MainActivity)
+        postAdapter = PostAdapter()
 
+        content_list.apply {
             adapter = postAdapter
             layoutManager = linearLayoutManager
             setHasFixedSize(true)
             addItemDecoration(DividerItemDecoration(this@MainActivity, linearLayoutManager.orientation))
+            addOnScrollListener(InfiniteScrollListener(linearLayoutManager) {
+                Log.e(TAG, "Bottom reached. Let's load items!")
+                this.post { makeRequest(postAdapter.getPostCount()) }
+            })
         }
 
-        test_button.setOnClickListener { makeRequest() }
+        // Initial request
+        makeRequest(0)
+
+        test_button.setOnClickListener { makeRequest(postAdapter.getPostCount()) }
     }
 
-    private fun makeRequest() {
+    private fun makeRequest(start: Int) {
         postApi()
-            .getPosts(0, 10)
+            .getPosts(start, POST_LOAD_LIMIT)
             .enqueue(object : Callback<List<Post>> {
                 override fun onFailure(call: Call<List<Post>>, t: Throwable) {
-                    Log.e(TAG, t.message)
+                    Log.e(TAG, "Loading posts failed.")
                 }
 
                 override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {
                     if (response.isSuccessful) {
                         response.body()?.let {
-                            postAdapter.loadPosts(it)
-                            Log.d(TAG, "posts loaded")
+                            if (it.isNotEmpty()) {
+                                postAdapter.loadPosts(it)
+                                Log.d(TAG, "posts loaded")
+                            } else {
+                                postAdapter.hideLoadingBar()
+                                Log.d(TAG, "hide loading bar")
+                            }
                         } ?: run {
-                            Log.e(TAG, "posts not loaded")
+                            Log.e(TAG, "posts are not loaded")
                         }
                     } else {
-                        Log.e(TAG, "What happens?")
+                        Log.e(TAG, "response is not successful")
                     }
                 }
             })
