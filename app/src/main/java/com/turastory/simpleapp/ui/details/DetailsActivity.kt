@@ -8,9 +8,10 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.turastory.simpleapp.R
 import com.turastory.simpleapp.ui.postedit.PostEditActivity
+import com.turastory.simpleapp.util.hide
+import com.turastory.simpleapp.util.show
 import com.turastory.simpleapp.util.toast
 import com.turastory.simpleapp.vo.Comment
 import com.turastory.simpleapp.vo.Post
@@ -99,13 +100,9 @@ class DetailsActivity : AppCompatActivity(), DetailsContract.View {
         }
     }
 
-    override fun showLoadingPage() {
-        loading_page.visibility = View.VISIBLE
-    }
+    override fun showLoadingPage() = loading_page.show()
 
-    override fun hideLoadingPage() {
-        loading_page.visibility = View.INVISIBLE
-    }
+    override fun hideLoadingPage() = loading_page.hide()
 
     override fun openEditPostView(post: Post) {
         startActivityForResult(

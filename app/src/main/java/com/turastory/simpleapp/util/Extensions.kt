@@ -17,3 +17,11 @@ fun ViewGroup.inflate(@LayoutRes layoutId: Int): View =
 fun Activity.toast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
+
+fun View.show() {
+    this.visibility = View.VISIBLE
+}
+
+fun View.hide(gone: Boolean = false) {
+    this.visibility = if (gone) View.GONE else View.INVISIBLE
+}
