@@ -28,7 +28,6 @@ class DetailsPresenter : DetailsContract.Presenter {
             .getPost(postId)
             .doOnSuccess {
                 it?.let { post ->
-                    Log.e("testtest", "load post details success")
                     this.post = post
                     view.showPostDetails(post)
                     checkLoaded()
@@ -47,7 +46,6 @@ class DetailsPresenter : DetailsContract.Presenter {
             .getComments(postId)
             .doOnSuccess {
                 it?.run {
-                    Log.e("testtest", "load comments success")
                     view.showComments(this)
                     checkLoaded()
                 }
@@ -78,7 +76,6 @@ class DetailsPresenter : DetailsContract.Presenter {
             }
             .doOnFailed {
                 Log.e(DetailsContract.TAG, "Erorr while deleting post $postId")
-                Log.e(DetailsContract.TAG, it)
             }
             .done()
     }
@@ -98,7 +95,6 @@ class DetailsPresenter : DetailsContract.Presenter {
             }
             .doOnFailed {
                 Log.e(DetailsContract.TAG, "Error while updating post $postId")
-                Log.e(DetailsContract.TAG, it)
             }
             .done()
     }

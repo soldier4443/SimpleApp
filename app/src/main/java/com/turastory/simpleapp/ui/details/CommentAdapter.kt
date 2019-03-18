@@ -1,7 +1,6 @@
 package com.turastory.simpleapp.ui.details
 
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.ViewGroup
 import com.turastory.simpleapp.R
 import com.turastory.simpleapp.util.BaseViewHolder
@@ -25,7 +24,6 @@ class CommentAdapter : RecyclerView.Adapter<CommentAdapter.ViewHolder>() {
     }
 
     fun setComments(comments: List<Comment>) {
-        Log.e("testtest", "Size: [${comments.size}]")
         this.comments.apply {
             clear()
             addAll(comments)
