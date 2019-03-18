@@ -25,7 +25,7 @@ interface PostApiService {
         @Path("postId") postId: Int
     ): Call<Void>
 
-    @GET("posts/{postId}/comments")
+    @GET("comments")
     fun getComments(
         @Query("postId") postId: Int
     ): Call<List<Comment>>
