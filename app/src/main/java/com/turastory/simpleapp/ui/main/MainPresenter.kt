@@ -20,11 +20,13 @@ class MainPresenter : MainContract.Presenter {
         postApi()
             .getPosts(posts.size, MainContract.POST_LOAD_LIMIT)
             .doOnSuccess {
-                if (it.isNotEmpty()) {
-                    posts += it
-                    view.showNewPosts(it)
-                } else {
-                    view.hideLoadingBar()
+                it?.let { newPosts ->
+                    if (newPosts.isNotEmpty()) {
+                        posts += it
+                        view.showNewPosts(it)
+                    } else {
+                        view.hideLoadingBar()
+                    }
                 }
             }
             .doOnFailed {

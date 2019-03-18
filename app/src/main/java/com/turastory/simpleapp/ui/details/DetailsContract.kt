@@ -13,10 +13,16 @@ interface DetailsContract {
         fun showComments(comments: List<Comment>)
         fun showLoadingPage()
         fun hideLoadingPage()
+        fun showConfirmDialog()
+        fun openEditPostView()
+        fun showDeletionComplete()
     }
 
     interface Presenter {
         fun setView(view: View)
         fun requestPostDetails(postId: Int)
+        fun requestDeletePost()
+        fun editPost()
+        fun deletePost()
     }
 }

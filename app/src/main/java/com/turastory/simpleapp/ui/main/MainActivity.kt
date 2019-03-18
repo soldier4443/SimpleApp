@@ -26,6 +26,18 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setupToolbar()
+        setupRecyclerView()
+
+        // Initial request
+        presenter.requestNewPosts()
+    }
+
+    private fun setupToolbar() {
+        setSupportActionBar(main_toolbar)
+    }
+
+    private fun setupRecyclerView() {
         val linearLayoutManager = LinearLayoutManager(this@MainActivity)
 
         content_list.apply {
@@ -45,9 +57,6 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                 }
             }))
         }
-
-        // Initial request
-        presenter.requestNewPosts()
     }
 
     override fun showLoadingBar() {

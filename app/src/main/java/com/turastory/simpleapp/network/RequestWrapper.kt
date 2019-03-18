@@ -9,10 +9,10 @@ import retrofit2.Response
  */
 class RequestWrapper<T>(private val originalCall: Call<T>) {
 
-    private var successTask: (T) -> Unit = { }
+    private var successTask: (T?) -> Unit = { }
     private var failedTask: (String) -> Unit = { }
 
-    fun doOnSuccess(task: (T) -> Unit): RequestWrapper<T> {
+    fun doOnSuccess(task: (T?) -> Unit): RequestWrapper<T> {
         this.successTask = task
         return this
     }
@@ -30,11 +30,7 @@ class RequestWrapper<T>(private val originalCall: Call<T>) {
 
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
-                    response.body()?.let {
-                        successTask(it)
-                    } ?: run {
-                        failedTask("data is null")
-                    }
+                    successTask(response.body())
                 } else {
                     failedTask("Error code: ${response.code()}")
                 }
@@ -45,7 +41,7 @@ class RequestWrapper<T>(private val originalCall: Call<T>) {
 
 // Additional extension functions
 
-fun <T> Call<T>.doOnSuccess(task: (T) -> Unit): RequestWrapper<T> {
+fun <T> Call<T>.doOnSuccess(task: (T?) -> Unit): RequestWrapper<T> {
     return RequestWrapper(this).doOnSuccess(task)
 }
 
