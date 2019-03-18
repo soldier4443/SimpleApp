@@ -42,6 +42,16 @@ class DetailsActivity : AppCompatActivity(), DetailsContract.View {
 
     private fun setupToolbar() {
         setSupportActionBar(details_toolbar)
+
+        supportActionBar!!.apply {
+            setDisplayShowHomeEnabled(true)
+            setDisplayHomeAsUpEnabled(true)
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
