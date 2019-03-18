@@ -4,5 +4,7 @@
   <string name="text_loading">Loading..</string>
   <string name="text_edit_post">edit</string>
   <string name="text_delete_post">delete</string>
+  <string name="text_edit_complete">edit complete</string>
   <string name="text_title_post_details">Post Details</string>
+  <string name="text_title_post_edit">Edit post</string>
 </resources>

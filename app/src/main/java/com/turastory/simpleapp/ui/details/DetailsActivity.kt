@@ -1,5 +1,7 @@
 package com.turastory.simpleapp.ui.details
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -8,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.turastory.simpleapp.R
+import com.turastory.simpleapp.ui.postedit.PostEditActivity
 import com.turastory.simpleapp.util.toast
 import com.turastory.simpleapp.vo.Comment
 import com.turastory.simpleapp.vo.Post
@@ -94,8 +97,33 @@ class DetailsActivity : AppCompatActivity(), DetailsContract.View {
         loading_page.visibility = View.INVISIBLE
     }
 
-    override fun openEditPostView() {
-        // TODO
+    override fun openEditPostView(post: Post) {
+        startActivityForResult(
+            Intent(this, PostEditActivity::class.java)
+                .putExtra("post", post),
+            DetailsContract.REQUEST_POST_EDIT)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == DetailsContract.REQUEST_POST_EDIT) {
+            handlePostEditResult(resultCode, data)
+        }
+    }
+
+    private fun handlePostEditResult(resultCode: Int, data: Intent?) {
+        when (resultCode) {
+            Activity.RESULT_OK -> {
+                data?.getParcelableExtra<Post>("post")?.let {
+                    presenter.updatePost(it)
+                }
+            }
+            Activity.RESULT_CANCELED -> {
+                toast("Editing canceled.")
+            }
+            else -> throw IllegalStateException("Illegal result code")
+        }
     }
 
     override fun showDeletionComplete() {

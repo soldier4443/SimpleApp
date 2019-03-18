@@ -3,6 +3,7 @@ package com.turastory.simpleapp.ui.details
 import android.util.Log
 import com.turastory.simpleapp.network.doOnSuccess
 import com.turastory.simpleapp.network.postApi
+import com.turastory.simpleapp.vo.Post
 import java.util.concurrent.CountDownLatch
 
 class DetailsPresenter : DetailsContract.Presenter {
@@ -11,6 +12,7 @@ class DetailsPresenter : DetailsContract.Presenter {
     private var counter: CountDownLatch? = null
 
     private var postId: Int = -1
+    private var post: Post? = null
 
     override fun setView(view: DetailsContract.View) {
         this.view = view
@@ -25,9 +27,10 @@ class DetailsPresenter : DetailsContract.Presenter {
         postApi()
             .getPost(postId)
             .doOnSuccess {
-                it?.run {
+                it?.let { post ->
                     Log.e("testtest", "load post details success")
-                    view.showPostDetails(this)
+                    this.post = post
+                    view.showPostDetails(post)
                     checkLoaded()
                 }
             }
@@ -55,6 +58,14 @@ class DetailsPresenter : DetailsContract.Presenter {
             .done()
     }
 
+    private fun checkLoaded() {
+        counter?.countDown()
+
+        val count = counter?.count ?: 0
+        if (count == 0L)
+            view.hideLoadingPage()
+    }
+
     override fun requestDeletePost() {
         view.showConfirmDialog()
     }
@@ -73,14 +84,22 @@ class DetailsPresenter : DetailsContract.Presenter {
     }
 
     override fun editPost() {
-        // TODO
+        post?.let { view.openEditPostView(it) }
     }
 
-    private fun checkLoaded() {
-        counter?.countDown()
-
-        val count = counter?.count ?: 0
-        if (count == 0L)
-            view.hideLoadingPage()
+    override fun updatePost(post: Post) {
+        postApi()
+            .updatePost(postId, post)
+            .doOnSuccess { updatedPost ->
+                updatedPost?.let {
+                    this.post = it
+                    view.showPostDetails(it)
+                }
+            }
+            .doOnFailed {
+                Log.e(DetailsContract.TAG, "Error while updating post $postId")
+                Log.e(DetailsContract.TAG, it)
+            }
+            .done()
     }
 }

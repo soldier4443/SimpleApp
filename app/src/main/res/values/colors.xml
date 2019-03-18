@@ -7,4 +7,5 @@
   <color name="colorText">#333333</color>
   <color name="colorTextLight">#666666</color>
   <color name="colorSurface">#FFFFFF</color>
+  <color name="colorSurface2">#F8F8F8</color>
 </resources>

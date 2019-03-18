@@ -3,10 +3,7 @@ package com.turastory.simpleapp.network
 import com.turastory.simpleapp.vo.Comment
 import com.turastory.simpleapp.vo.Post
 import retrofit2.Call
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface PostApiService {
     @GET("posts")
@@ -29,4 +26,10 @@ interface PostApiService {
     fun getComments(
         @Query("postId") postId: Int
     ): Call<List<Comment>>
+
+    @PATCH("posts/{postId}")
+    fun updatePost(
+        @Path("postId") postId: Int,
+        @Body post: Post
+    ): Call<Post>
 }

@@ -19,6 +19,7 @@
       </intent-filter>
     </activity>
     <activity android:name=".ui.details.DetailsActivity" />
+    <activity android:name=".ui.postedit.PostEditActivity" />
   </application>
 
 </manifest>

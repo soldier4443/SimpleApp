@@ -6,6 +6,7 @@ import com.turastory.simpleapp.vo.Post
 interface DetailsContract {
     companion object {
         const val TAG = "Details"
+        const val REQUEST_POST_EDIT = 101
     }
 
     interface View {
@@ -14,7 +15,7 @@ interface DetailsContract {
         fun showLoadingPage()
         fun hideLoadingPage()
         fun showConfirmDialog()
-        fun openEditPostView()
+        fun openEditPostView(post: Post)
         fun showDeletionComplete()
     }
 
@@ -24,5 +25,6 @@ interface DetailsContract {
         fun requestDeletePost()
         fun editPost()
         fun deletePost()
+        fun updatePost(post: Post)
     }
 }
