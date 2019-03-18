@@ -1,5 +1,7 @@
 package com.turastory.simpleapp.ui.details
 
+import com.turastory.simpleapp.base.BasePresenter
+import com.turastory.simpleapp.base.BaseView
 import com.turastory.simpleapp.vo.Comment
 import com.turastory.simpleapp.vo.Post
 
@@ -9,7 +11,7 @@ interface DetailsContract {
         const val REQUEST_POST_EDIT = 101
     }
 
-    interface View {
+    interface View : BaseView {
         fun showPostDetails(post: Post)
         fun showComments(comments: List<Comment>)
         fun showLoadingPage()
@@ -19,8 +21,8 @@ interface DetailsContract {
         fun showDeletionComplete()
     }
 
-    interface Presenter {
-        fun setView(view: View)
+    interface Presenter : BasePresenter<View> {
+        override fun setView(view: View)
         fun requestPostDetails(postId: Int)
         fun requestDeletePost()
         fun editPost()
