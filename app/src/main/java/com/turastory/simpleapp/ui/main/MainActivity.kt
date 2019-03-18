@@ -12,15 +12,12 @@ import com.turastory.simpleapp.util.InfiniteScrollListener
 import com.turastory.simpleapp.util.RecyclerViewItemClickListener
 import com.turastory.simpleapp.vo.Post
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity(), MainContract.View {
 
+    private val presenter: MainContract.Presenter by inject()
     private val postAdapter: PostAdapter = PostAdapter()
-    private val presenter: MainContract.Presenter by lazy {
-        MainPresenter().apply {
-            setView(this@MainActivity)
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +27,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         setupRecyclerView()
 
         // Initial request
+        presenter.setView(this@MainActivity)
         presenter.requestNewPosts()
     }
 

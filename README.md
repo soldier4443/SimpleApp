@@ -7,6 +7,7 @@
 ## Technology stacks
 
 - Kotlin
+- Koin as a service locator
 - OkHttp + Retrofit
 
 ## Todos

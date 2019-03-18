@@ -1,12 +1,13 @@
 package com.turastory.simpleapp.ui.details
 
 import android.util.Log
-import com.turastory.simpleapp.network.doOnSuccess
-import com.turastory.simpleapp.network.postApi
+import com.turastory.simpleapp.data.repository.PostRepository
 import com.turastory.simpleapp.vo.Post
 import java.util.concurrent.CountDownLatch
 
-class DetailsPresenter : DetailsContract.Presenter {
+class DetailsPresenter(
+    private val postRepository: PostRepository
+) : DetailsContract.Presenter {
 
     private lateinit var view: DetailsContract.View
     private var counter: CountDownLatch? = null
@@ -24,7 +25,7 @@ class DetailsPresenter : DetailsContract.Presenter {
         counter = CountDownLatch(2)
         view.showLoadingPage()
 
-        postApi()
+        postRepository
             .getPost(postId)
             .doOnSuccess {
                 it?.let { post ->
@@ -42,7 +43,7 @@ class DetailsPresenter : DetailsContract.Presenter {
     }
 
     private fun requestComments() {
-        postApi()
+        postRepository
             .getComments(postId)
             .doOnSuccess {
                 it?.run {
@@ -69,7 +70,7 @@ class DetailsPresenter : DetailsContract.Presenter {
     }
 
     override fun deletePost() {
-        postApi()
+        postRepository
             .deletePost(postId)
             .doOnSuccess {
                 view.showDeletionComplete()
@@ -85,7 +86,7 @@ class DetailsPresenter : DetailsContract.Presenter {
     }
 
     override fun updatePost(post: Post) {
-        postApi()
+        postRepository
             .updatePost(postId, post)
             .doOnSuccess { updatedPost ->
                 updatedPost?.let {

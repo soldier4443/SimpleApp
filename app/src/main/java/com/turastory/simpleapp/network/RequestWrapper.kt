@@ -41,10 +41,6 @@ class RequestWrapper<T>(private val originalCall: Call<T>) {
 
 // Additional extension functions
 
-fun <T> Call<T>.doOnSuccess(task: (T?) -> Unit): RequestWrapper<T> {
-    return RequestWrapper(this).doOnSuccess(task)
-}
-
-fun <T> Call<T>.doOnFailed(task: (String) -> Unit): RequestWrapper<T> {
-    return RequestWrapper(this).doOnFailed(task)
+fun <T> Call<T>.wrap(): RequestWrapper<T> {
+    return RequestWrapper(this)
 }

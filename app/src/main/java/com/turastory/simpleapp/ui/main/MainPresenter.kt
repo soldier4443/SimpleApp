@@ -1,11 +1,12 @@
 package com.turastory.simpleapp.ui.main
 
 import android.util.Log
-import com.turastory.simpleapp.network.doOnSuccess
-import com.turastory.simpleapp.network.postApi
+import com.turastory.simpleapp.data.repository.PostRepository
 import com.turastory.simpleapp.vo.Post
 
-class MainPresenter : MainContract.Presenter {
+class MainPresenter(
+    private val postRepository: PostRepository
+) : MainContract.Presenter {
     private lateinit var view: MainContract.View
 
     private val posts = mutableListOf<Post>()
@@ -17,7 +18,7 @@ class MainPresenter : MainContract.Presenter {
     }
 
     override fun requestNewPosts() {
-        postApi()
+        postRepository
             .getPosts(posts.size, MainContract.POST_LOAD_LIMIT)
             .doOnSuccess {
                 it?.let { newPosts ->

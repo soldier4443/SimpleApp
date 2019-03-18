@@ -1,4 +1,4 @@
-package com.turastory.simpleapp.network
+package com.turastory.simpleapp.network.api
 
 import com.turastory.simpleapp.vo.Comment
 import com.turastory.simpleapp.vo.Post
@@ -20,7 +20,7 @@ interface PostApiService {
     @DELETE("posts/{postId}")
     fun deletePost(
         @Path("postId") postId: Int
-    ): Call<Void>
+    ): Call<Void> // Ignore the response body
 
     @GET("comments")
     fun getComments(

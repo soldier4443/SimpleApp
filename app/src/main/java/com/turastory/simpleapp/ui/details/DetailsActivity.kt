@@ -16,12 +16,11 @@ import com.turastory.simpleapp.util.toast
 import com.turastory.simpleapp.vo.Comment
 import com.turastory.simpleapp.vo.Post
 import kotlinx.android.synthetic.main.activity_details.*
+import org.koin.android.ext.android.inject
 
 class DetailsActivity : AppCompatActivity(), DetailsContract.View {
-    private val presenter: DetailsContract.Presenter by lazy {
-        DetailsPresenter()
-    }
 
+    private val presenter: DetailsContract.Presenter by inject()
     private val commentAdapter: CommentAdapter = CommentAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -123,6 +122,7 @@ class DetailsActivity : AppCompatActivity(), DetailsContract.View {
         when (resultCode) {
             Activity.RESULT_OK -> {
                 data?.getParcelableExtra<Post>("post")?.let {
+                    toast("Update post complete!")
                     presenter.updatePost(it)
                 }
             }
