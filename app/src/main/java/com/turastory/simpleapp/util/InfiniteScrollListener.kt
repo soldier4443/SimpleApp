@@ -7,10 +7,11 @@ import android.support.v7.widget.RecyclerView
  * Scroll listener for infinite scroll.
  * Use delay to prevent multiple omission of events
  */
-class InfiniteScrollListener(private val layoutManager: LinearLayoutManager,
-                             private val activeDelay: Int = 500,
-                             private val task: () -> Unit = {})
-    : RecyclerView.OnScrollListener() {
+class InfiniteScrollListener(
+    private val layoutManager: LinearLayoutManager,
+    private val activeDelay: Int = 500,
+    private val task: () -> Unit = {}
+) : RecyclerView.OnScrollListener() {
 
     private var lastActiveTime: Long = System.currentTimeMillis()
 
@@ -29,7 +30,8 @@ class InfiniteScrollListener(private val layoutManager: LinearLayoutManager,
 
         if (lastItemPosition() == maxCount - 1 &&
             maxCount > 0 &&
-            (System.currentTimeMillis() - lastActiveTime) > activeDelay) {
+            (System.currentTimeMillis() - lastActiveTime) > activeDelay
+        ) {
 
             task()
             lastActiveTime = System.currentTimeMillis()

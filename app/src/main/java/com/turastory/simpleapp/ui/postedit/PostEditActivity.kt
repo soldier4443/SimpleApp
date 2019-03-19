@@ -74,7 +74,8 @@ class PostEditActivity : AppCompatActivity() {
         this.post.id,
         this.post.userId,
         post_edit_title.text.toString(),
-        post_edit_body.text.toString())
+        post_edit_body.text.toString()
+    )
 
     private fun completeEdit(post: Post) {
         setResult(Activity.RESULT_OK, Intent().putExtra("post", post))

@@ -48,7 +48,6 @@ class MainPresenter(
     }
 
     override fun cleanUp() {
-        Log.e("testtest", "Size of composite disposable: [${compositeDisposable.size()}]")
         compositeDisposable.dispose()
     }
 }

@@ -43,17 +43,27 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             layoutManager = linearLayoutManager
 
             setHasFixedSize(true)
-            addItemDecoration(DividerItemDecoration(this@MainActivity, linearLayoutManager.orientation))
+            addItemDecoration(
+                DividerItemDecoration(
+                    this@MainActivity,
+                    linearLayoutManager.orientation
+                )
+            )
 
             addOnScrollListener(InfiniteScrollListener(linearLayoutManager) {
                 this.post { presenter.requestNewPosts() }
             })
 
-            addOnItemTouchListener(RecyclerViewItemClickListener(this@MainActivity, this, { _, pos ->
-                if (postAdapter.isNotLoading(pos)) {
-                    presenter.onItemClick(pos)
-                }
-            }))
+            addOnItemTouchListener(
+                RecyclerViewItemClickListener(
+                    this@MainActivity,
+                    this,
+                    { _, pos ->
+                        if (postAdapter.isNotLoading(pos)) {
+                            presenter.onItemClick(pos)
+                        }
+                    })
+            )
         }
     }
 
@@ -76,7 +86,9 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     }
 
     override fun openDetailsView(id: Int) {
-        startActivity(Intent(this, DetailsActivity::class.java)
-            .putExtra("postId", id))
+        startActivity(
+            Intent(this, DetailsActivity::class.java)
+                .putExtra("postId", id)
+        )
     }
 }

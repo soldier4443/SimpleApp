@@ -18,6 +18,5 @@ class LoadingDelegateAdapter : ViewTypeDelegateAdapter {
     override fun onBindViewHolder(holder: DelegateViewHolder, item: ViewType, position: Int) {
     }
 
-    class LoadingViewHolder(parent: ViewGroup)
-        : DelegateViewHolder(R.layout.layout_loading, parent)
+    class LoadingViewHolder(parent: ViewGroup) : DelegateViewHolder(R.layout.layout_loading, parent)
 }

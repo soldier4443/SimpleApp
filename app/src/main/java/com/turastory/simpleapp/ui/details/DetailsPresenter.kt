@@ -67,7 +67,7 @@ class DetailsPresenter(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnError {
-                Log.e(DetailsContract.TAG, "Erorr while deleting post $postId")
+                Log.e(DetailsContract.TAG, "Error while deleting post $postId")
             }
             .subscribe {
                 view.showDeletionComplete()
@@ -95,7 +95,6 @@ class DetailsPresenter(
     }
 
     override fun cleanUp() {
-        Log.e("testtest", "Size of composite disposable: [${compositeDisposable.size()}]")
         compositeDisposable.dispose()
     }
 }

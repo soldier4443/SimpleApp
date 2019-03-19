@@ -31,8 +31,7 @@ class CommentAdapter : RecyclerView.Adapter<CommentAdapter.ViewHolder>() {
         }
     }
 
-    class ViewHolder(viewGroup: ViewGroup)
-        : BaseViewHolder(R.layout.layout_comment, viewGroup) {
+    class ViewHolder(viewGroup: ViewGroup) : BaseViewHolder(R.layout.layout_comment, viewGroup) {
         fun bind(comment: Comment) {
             with(itemView) {
                 comment_name.text = comment.name

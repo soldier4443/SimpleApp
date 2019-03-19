@@ -107,7 +107,8 @@ class DetailsActivity : AppCompatActivity(), DetailsContract.View {
         startActivityForResult(
             Intent(this, PostEditActivity::class.java)
                 .putExtra("post", post),
-            DetailsContract.REQUEST_POST_EDIT)
+            DetailsContract.REQUEST_POST_EDIT
+        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
