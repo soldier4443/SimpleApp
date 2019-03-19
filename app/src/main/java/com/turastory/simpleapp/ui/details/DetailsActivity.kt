@@ -134,8 +134,11 @@ class DetailsActivity : AppCompatActivity(), DetailsContract.View {
         }
     }
 
-    override fun showDeletionComplete() {
-        toast("Deleting post complete!")
+    override fun completeDeletion(postId: Int) {
+        setResult(
+            Activity.RESULT_OK,
+            Intent().putExtra("deletedPostId", postId)
+        )
         finish()
     }
 }

@@ -70,7 +70,7 @@ class DetailsPresenter(
                 Log.e(DetailsContract.TAG, "Error while deleting post $postId")
             }
             .subscribe {
-                view.showDeletionComplete()
+                view.completeDeletion(postId)
             }
     }
 

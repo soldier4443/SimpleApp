@@ -18,7 +18,7 @@ interface DetailsContract {
         fun hideLoadingPage()
         fun showConfirmDialog()
         fun openEditPostView(post: Post)
-        fun showDeletionComplete()
+        fun completeDeletion(postId: Int)
     }
 
     interface Presenter : BasePresenter<View> {

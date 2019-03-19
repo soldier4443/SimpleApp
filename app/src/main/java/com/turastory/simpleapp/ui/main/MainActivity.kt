@@ -1,5 +1,6 @@
 package com.turastory.simpleapp.ui.main
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -10,6 +11,7 @@ import com.turastory.simpleapp.ui.details.DetailsActivity
 import com.turastory.simpleapp.ui.main.adapter.PostAdapter
 import com.turastory.simpleapp.util.InfiniteScrollListener
 import com.turastory.simpleapp.util.RecyclerViewItemClickListener
+import com.turastory.simpleapp.util.toast
 import com.turastory.simpleapp.vo.Post
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
@@ -78,17 +80,47 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     override fun showNewPosts(posts: List<Post>) {
         val beforeCount = postAdapter.getPostCount()
 
-        postAdapter.showNewPosts(posts)
+        postAdapter.addPosts(posts)
 
         // For initial load, scroll up to prevent weirdly going down.
         if (beforeCount == 0)
             content_list.scrollToPosition(0)
     }
 
+    override fun hideDeletedPost(deletedPostId: Int) {
+        postAdapter.removePost(deletedPostId)
+    }
+
     override fun openDetailsView(id: Int) {
-        startActivity(
+        startActivityForResult(
             Intent(this, DetailsActivity::class.java)
-                .putExtra("postId", id)
+                .putExtra("postId", id),
+            MainContract.REQUEST_DETAILS
         )
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == MainContract.REQUEST_DETAILS) {
+            handleDetailsResult(resultCode, data)
+        }
+    }
+
+    private fun handleDetailsResult(resultCode: Int, data: Intent?) {
+        when (resultCode) {
+            Activity.RESULT_OK -> {
+                data?.getIntExtra("deletedPostId", -1)?.let {
+                    if (it != -1) {
+                        toast("Deleting post complete!")
+                        presenter.notifyPostDeleted(it)
+                    }
+                }
+            }
+            Activity.RESULT_CANCELED -> {
+                // Do nothing
+            }
+            else -> throw IllegalStateException("Illegal result code")
+        }
     }
 }

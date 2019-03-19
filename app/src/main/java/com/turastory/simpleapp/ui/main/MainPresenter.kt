@@ -50,4 +50,8 @@ class MainPresenter(
     override fun cleanUp() {
         compositeDisposable.dispose()
     }
+
+    override fun notifyPostDeleted(deletedPostId: Int) {
+        view.hideDeletedPost(deletedPostId)
+    }
 }

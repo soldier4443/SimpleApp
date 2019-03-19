@@ -23,12 +23,19 @@ class PostAdapter : RecyclerView.Adapter<DelegateViewHolder>() {
         delegates.put(ViewType.CONTENT, PostDelegateAdapter())
     }
 
-    fun showNewPosts(newPosts: List<Post>) {
+    fun addPosts(newPosts: List<Post>) {
         // Add new posts
         val start = items.lastIndex
 
         items.addAll(start, newPosts)
         notifyItemRangeInserted(start, newPosts.size)
+    }
+
+    fun removePost(postId: Int) {
+        val index = items.indexOfFirst { item -> item is Post && item.id == postId }
+
+        items.removeAt(index)
+        notifyItemRemoved(index)
     }
 
     // Does not count loading bar as an item.
