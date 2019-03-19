@@ -2,7 +2,8 @@ package com.turastory.simpleapp.network.api
 
 import com.turastory.simpleapp.vo.Comment
 import com.turastory.simpleapp.vo.Post
-import retrofit2.Call
+import io.reactivex.Completable
+import io.reactivex.Single
 import retrofit2.http.*
 
 interface PostApiService {
@@ -10,26 +11,26 @@ interface PostApiService {
     fun getPosts(
         @Query("_start") start: Int,
         @Query("_limit") limit: Int
-    ): Call<List<Post>>
+    ): Single<List<Post>>
 
     @GET("posts/{postId}")
     fun getPost(
         @Path("postId") postId: Int
-    ): Call<Post>
+    ): Single<Post>
 
     @DELETE("posts/{postId}")
     fun deletePost(
         @Path("postId") postId: Int
-    ): Call<Void> // Ignore the response body
+    ): Completable // Ignore the response
 
     @GET("comments")
     fun getComments(
         @Query("postId") postId: Int
-    ): Call<List<Comment>>
+    ): Single<List<Comment>>
 
     @PATCH("posts/{postId}")
     fun updatePost(
         @Path("postId") postId: Int,
         @Body post: Post
-    ): Call<Post>
+    ): Single<Post>
 }

@@ -9,6 +9,7 @@
 - Kotlin
 - Koin as a service locator
 - OkHttp + Retrofit
+- RxJava
 
 ## Todos
 
@@ -20,4 +21,4 @@
 - [ ] Screen orientation 대응?
 - [ ] Main - body 3줄 요약
 - [ ] 로컬 DB - DataSource 추상화
-- [ ] RxJava - 네트워크 요청 묶어서 깔끔하게 처리하기
+- [x] RxJava - 네트워크 요청 묶어서 깔끔하게 처리하기

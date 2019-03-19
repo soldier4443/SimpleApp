@@ -2,15 +2,19 @@ package com.turastory.simpleapp.ui.details
 
 import android.util.Log
 import com.turastory.simpleapp.data.repository.PostRepository
+import com.turastory.simpleapp.util.plusAssign
 import com.turastory.simpleapp.vo.Post
-import java.util.concurrent.CountDownLatch
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 class DetailsPresenter(
     private val postRepository: PostRepository
 ) : DetailsContract.Presenter {
 
+    private val compositeDisposable = CompositeDisposable()
     private lateinit var view: DetailsContract.View
-    private var counter: CountDownLatch? = null
 
     private var postId: Int = -1
     private var post: Post? = null
@@ -22,47 +26,35 @@ class DetailsPresenter(
     override fun requestPostDetails(postId: Int) {
         this.postId = postId
 
-        counter = CountDownLatch(2)
-        view.showLoadingPage()
-
-        postRepository
-            .getPost(postId)
-            .doOnSuccess {
-                it?.let { post ->
-                    this.post = post
-                    view.showPostDetails(post)
-                    checkLoaded()
-                }
-            }
-            .doOnFailed {
+        val postDetails = postRepository.getPost(postId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnError {
                 Log.e(DetailsContract.TAG, "Error while loading post details - $it")
             }
-            .done()
-
-        requestComments()
-    }
-
-    private fun requestComments() {
-        postRepository
-            .getComments(postId)
-            .doOnSuccess {
-                it?.run {
-                    view.showComments(this)
-                    checkLoaded()
-                }
+            .doOnSuccess { post ->
+                this.post = post
+                view.showPostDetails(post)
             }
-            .doOnFailed {
+
+        val requestComments = postRepository.getComments(postId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnError {
                 Log.e(DetailsContract.TAG, "Error while loading comments - $it")
             }
-            .done()
-    }
+            .doOnSuccess { comments ->
+                view.showComments(comments)
+            }
 
-    private fun checkLoaded() {
-        counter?.countDown()
-
-        val count = counter?.count ?: 0
-        if (count == 0L)
-            view.hideLoadingPage()
+        compositeDisposable += Single.merge(postDetails, requestComments)
+            .doOnSubscribe {
+                view.showLoadingPage()
+            }
+            .doOnTerminate {
+                view.hideLoadingPage()
+            }
+            .subscribe()
     }
 
     override fun requestDeletePost() {
@@ -70,15 +62,16 @@ class DetailsPresenter(
     }
 
     override fun deletePost() {
-        postRepository
+        compositeDisposable += postRepository
             .deletePost(postId)
-            .doOnSuccess {
-                view.showDeletionComplete()
-            }
-            .doOnFailed {
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnError {
                 Log.e(DetailsContract.TAG, "Erorr while deleting post $postId")
             }
-            .done()
+            .subscribe {
+                view.showDeletionComplete()
+            }
     }
 
     override fun editPost() {
@@ -86,17 +79,23 @@ class DetailsPresenter(
     }
 
     override fun updatePost(post: Post) {
-        postRepository
+        compositeDisposable += postRepository
             .updatePost(postId, post)
-            .doOnSuccess { updatedPost ->
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnError {
+                Log.e(DetailsContract.TAG, "Error while updating post $postId")
+            }
+            .subscribe { updatedPost ->
                 updatedPost?.let {
                     this.post = it
                     view.showPostDetails(it)
                 }
             }
-            .doOnFailed {
-                Log.e(DetailsContract.TAG, "Error while updating post $postId")
-            }
-            .done()
+    }
+
+    override fun cleanUp() {
+        Log.e("testtest", "Size of composite disposable: [${compositeDisposable.size()}]")
+        compositeDisposable.dispose()
     }
 }
