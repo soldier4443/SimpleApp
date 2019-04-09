@@ -1,7 +1,7 @@
 package com.turastory.simpleapp.ui.details
 
-import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.turastory.simpleapp.R
 import com.turastory.simpleapp.util.BaseViewHolder
 import com.turastory.simpleapp.vo.Comment

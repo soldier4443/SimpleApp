@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
@@ -7,7 +7,7 @@
   android:layout_height="match_parent"
   android:background="@color/colorSurface">
 
-  <android.support.v7.widget.Toolbar
+  <androidx.appcompat.widget.Toolbar
     android:id="@+id/post_edit_toolbar"
     android:layout_width="0dp"
     android:layout_height="?attr/actionBarSize"
@@ -20,7 +20,7 @@
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     app:title="@string/text_title_post_edit" />
 
-  <android.support.constraint.ConstraintLayout
+  <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="0dp"
     android:layout_height="0dp"
     android:padding="@dimen/margin_basic"
@@ -83,6 +83,6 @@
       app:layout_constraintTop_toBottomOf="@+id/post_edit_body_label"
       tools:text="sadjnandkskadnjksa" />
 
-  </android.support.constraint.ConstraintLayout>
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
