@@ -11,7 +11,7 @@ import com.turastory.simpleapp.ui.details.DetailsActivity
 import com.turastory.simpleapp.ui.main.adapter.PostAdapter
 import com.turastory.simpleapp.util.InfiniteScrollListener
 import com.turastory.simpleapp.util.RecyclerViewItemClickListener
-import com.turastory.simpleapp.util.toast
+import com.turastory.simpleapp.ext.toast
 import com.turastory.simpleapp.vo.Post
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject

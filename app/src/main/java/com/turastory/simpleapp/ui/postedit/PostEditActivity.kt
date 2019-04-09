@@ -8,7 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import com.turastory.simpleapp.R
-import com.turastory.simpleapp.util.toast
+import com.turastory.simpleapp.ext.toast
 import com.turastory.simpleapp.vo.Post
 import kotlinx.android.synthetic.main.activity_post_edit.*
 

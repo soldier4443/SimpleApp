@@ -2,7 +2,7 @@ package com.turastory.simpleapp.ui.details
 
 import android.util.Log
 import com.turastory.simpleapp.data.repository.PostRepository
-import com.turastory.simpleapp.util.plusAssign
+import com.turastory.simpleapp.ext.plusAssign
 import com.turastory.simpleapp.vo.Post
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers

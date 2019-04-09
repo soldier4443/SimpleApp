@@ -1,4 +1,4 @@
-package com.turastory.simpleapp.util
+package com.turastory.simpleapp.ext
 
 import android.app.Activity
 import android.support.annotation.LayoutRes
@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 
 /**
  * Kotlin extension functions
@@ -26,8 +24,4 @@ fun View.show() {
 
 fun View.hide(gone: Boolean = false) {
     this.visibility = if (gone) View.GONE else View.INVISIBLE
-}
-
-operator fun CompositeDisposable.plusAssign(disposable: Disposable) {
-    this.add(disposable)
 }
