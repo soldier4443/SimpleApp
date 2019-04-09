@@ -1,4 +1,4 @@
-package com.turastory.simpleapp.network.api
+package com.turastory.simpleapp.api
 
 import com.turastory.simpleapp.vo.Comment
 import com.turastory.simpleapp.vo.Post

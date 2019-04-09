@@ -1,17 +1,27 @@
 package com.turastory.simpleapp.base
 
 import android.app.Application
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
+import com.turastory.simpleapp.dagger.DaggerComponentProvider
+import com.turastory.simpleapp.dagger.component.AppComponent
+import com.turastory.simpleapp.dagger.component.DaggerAppComponent
+import com.turastory.simpleapp.dagger.component.DaggerNetworkComponent
 
-class SimpleApplication : Application() {
+class SimpleApplication : Application(), DaggerComponentProvider {
+
+    private lateinit var appComponent: AppComponent
 
     override fun onCreate() {
         super.onCreate()
 
-        startKoin {
-            androidContext(this@SimpleApplication)
-            modules(modules)
-        }
+        initDagger()
     }
+
+    private fun initDagger() {
+        appComponent = DaggerAppComponent.builder()
+            .networkComponent(DaggerNetworkComponent.create())
+            .build()
+    }
+
+    override val component: AppComponent
+        get() = appComponent
 }

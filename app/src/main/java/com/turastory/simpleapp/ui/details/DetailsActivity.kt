@@ -3,25 +3,31 @@ package com.turastory.simpleapp.ui.details
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.turastory.simpleapp.R
-import com.turastory.simpleapp.ui.postedit.PostEditActivity
+import com.turastory.simpleapp.base.BaseActivity
 import com.turastory.simpleapp.ext.hide
+import com.turastory.simpleapp.ext.injector
 import com.turastory.simpleapp.ext.show
 import com.turastory.simpleapp.ext.toast
+import com.turastory.simpleapp.ui.postedit.PostEditActivity
 import com.turastory.simpleapp.vo.Comment
 import com.turastory.simpleapp.vo.Post
 import kotlinx.android.synthetic.main.activity_details.*
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 
-class DetailsActivity : AppCompatActivity(), DetailsContract.View {
+class DetailsActivity : BaseActivity(), DetailsContract.View {
 
-    private val presenter: DetailsContract.Presenter by inject()
+    @Inject
+    lateinit var presenter: DetailsContract.Presenter
     private val commentAdapter: CommentAdapter = CommentAdapter()
+
+    override fun inject() {
+        injector.inject(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

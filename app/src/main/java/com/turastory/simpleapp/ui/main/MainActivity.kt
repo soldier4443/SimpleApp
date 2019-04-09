@@ -3,23 +3,29 @@ package com.turastory.simpleapp.ui.main
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.turastory.simpleapp.R
+import com.turastory.simpleapp.base.BaseActivity
+import com.turastory.simpleapp.ext.injector
+import com.turastory.simpleapp.ext.toast
 import com.turastory.simpleapp.ui.details.DetailsActivity
 import com.turastory.simpleapp.ui.main.adapter.PostAdapter
 import com.turastory.simpleapp.util.InfiniteScrollListener
 import com.turastory.simpleapp.util.RecyclerViewItemClickListener
-import com.turastory.simpleapp.ext.toast
 import com.turastory.simpleapp.vo.Post
 import kotlinx.android.synthetic.main.activity_main.*
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), MainContract.View {
+class MainActivity : BaseActivity(), MainContract.View {
 
-    private val presenter: MainContract.Presenter by inject()
+    @Inject
+    lateinit var presenter: MainContract.Presenter
     private val postAdapter: PostAdapter = PostAdapter()
+
+    override fun inject() {
+        injector.inject(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -8,8 +8,9 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class DetailsPresenter(
+class DetailsPresenter @Inject constructor(
     private val postRepository: PostRepository
 ) : DetailsContract.Presenter {
 

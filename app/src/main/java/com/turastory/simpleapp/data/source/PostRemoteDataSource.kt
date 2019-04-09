@@ -1,6 +1,6 @@
 package com.turastory.simpleapp.data.source
 
-import com.turastory.simpleapp.network.api.PostApiService
+import com.turastory.simpleapp.api.PostApiService
 import com.turastory.simpleapp.vo.Comment
 import com.turastory.simpleapp.vo.Post
 import io.reactivex.Completable

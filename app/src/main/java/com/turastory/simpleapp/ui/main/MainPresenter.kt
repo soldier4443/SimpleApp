@@ -7,8 +7,9 @@ import com.turastory.simpleapp.vo.Post
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class MainPresenter(
+class MainPresenter @Inject constructor(
     private val postRepository: PostRepository
 ) : MainContract.Presenter {
 
