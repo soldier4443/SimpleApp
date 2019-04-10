@@ -31,8 +31,11 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRepository(dataSource: PostRemoteDataSource): PostRepository {
-        return PostRepository(dataSource)
+    fun provideRepository(
+        apiService: PostApiService,
+        dataSource: PostRemoteDataSource
+    ): PostRepository {
+        return PostRepository(apiService, dataSource)
     }
 
     private val retrofitBuilder: Retrofit.Builder = Retrofit.Builder()

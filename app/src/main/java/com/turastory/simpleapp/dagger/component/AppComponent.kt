@@ -1,6 +1,8 @@
 package com.turastory.simpleapp.dagger.component
 
 import com.turastory.simpleapp.dagger.module.AppModule
+import com.turastory.simpleapp.dagger.module.ViewModelFactoryModule
+import com.turastory.simpleapp.dagger.module.ViewModelModule
 import com.turastory.simpleapp.dagger.scope.ActivityScope
 import com.turastory.simpleapp.ui.details.DetailsActivity
 import com.turastory.simpleapp.ui.main.MainActivity
@@ -9,7 +11,9 @@ import dagger.Component
 @ActivityScope
 @Component(
     modules = [
-        AppModule::class
+        AppModule::class,
+        ViewModelFactoryModule::class,
+        ViewModelModule::class
     ],
     dependencies = [
         NetworkComponent::class
