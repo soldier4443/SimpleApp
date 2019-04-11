@@ -1,7 +1,6 @@
 package com.turastory.simpleapp.dagger.module.data
 
 import com.turastory.simpleapp.api.PostApiService
-import com.turastory.simpleapp.data.source.PostRemoteDataSource
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -20,12 +19,6 @@ class NetworkModule {
             .baseUrl("https://jsonplaceholder.typicode.com/")
             .build()
             .create(PostApiService::class.java)
-    }
-
-    @Provides
-    @Singleton
-    fun provideRemoteDataSource(apiService: PostApiService): PostRemoteDataSource {
-        return PostRemoteDataSource(apiService)
     }
 
     private val retrofitBuilder: Retrofit.Builder = Retrofit.Builder()

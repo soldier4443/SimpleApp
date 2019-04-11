@@ -2,7 +2,6 @@ package com.turastory.simpleapp.dagger.module.data
 
 import android.app.Application
 import androidx.room.Room
-import com.turastory.simpleapp.data.source.PostLocalDataSource
 import com.turastory.simpleapp.db.PostDao
 import com.turastory.simpleapp.db.PostDatabase
 import dagger.Module
@@ -27,11 +26,5 @@ class RoomModule(application: Application) {
     @Provides
     fun providePostDao(): PostDao {
         return db.postDao()
-    }
-
-    @Singleton
-    @Provides
-    fun provideLocalDataSource(postDao: PostDao): PostLocalDataSource {
-        return PostLocalDataSource(postDao)
     }
 }

@@ -5,8 +5,7 @@ import androidx.paging.toObservable
 import com.turastory.simpleapp.api.PostApiService
 import com.turastory.simpleapp.data.Repository
 import com.turastory.simpleapp.data.source.PostDataSource
-import com.turastory.simpleapp.data.source.PostLocalDataSource
-import com.turastory.simpleapp.data.source.PostRemoteDataSource
+import com.turastory.simpleapp.db.PostDatabase
 import com.turastory.simpleapp.vo.Comment
 import com.turastory.simpleapp.vo.Post
 import io.reactivex.Completable
@@ -17,8 +16,7 @@ import io.reactivex.schedulers.Schedulers
 
 class PostRepository(
     private val postApiService: PostApiService,
-    private val postLocalDataSource: PostLocalDataSource,
-    private val remoteDataSource: PostRemoteDataSource
+    private val db: PostDatabase
 ) : Repository {
 
     private val sourceFactory = PostDataSource.Factory(postApiService)
@@ -36,18 +34,18 @@ class PostRepository(
     }
 
     fun getPost(postId: Int): Single<Post> {
-        return remoteDataSource.getPost(postId)
+        return postApiService.getPost(postId)
     }
 
     fun getComments(postId: Int): Single<List<Comment>> {
-        return remoteDataSource.getComments(postId)
+        return postApiService.getComments(postId)
     }
 
     fun deletePost(postId: Int): Completable {
-        return remoteDataSource.deletePost(postId)
+        return postApiService.deletePost(postId)
     }
 
     fun updatePost(postId: Int, newPostData: Post): Single<Post> {
-        return remoteDataSource.updatePost(postId, newPostData)
+        return postApiService.updatePost(postId, newPostData)
     }
 }
