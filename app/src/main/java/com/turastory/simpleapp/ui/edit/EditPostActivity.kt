@@ -6,29 +6,50 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.turastory.simpleapp.R
+import com.turastory.simpleapp.base.BaseActivity
+import com.turastory.simpleapp.ext.injector
+import com.turastory.simpleapp.ext.observe
+import com.turastory.simpleapp.ext.plusAssign
 import com.turastory.simpleapp.ext.toast
 import com.turastory.simpleapp.vo.Post
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_post_edit.*
+import javax.inject.Inject
 
-class EditPostActivity : AppCompatActivity() {
+class EditPostActivity : BaseActivity() {
 
-    private lateinit var post: Post
+    @Inject
+    lateinit var vm: EditPostViewModel
+    private val compositeDisposable = CompositeDisposable()
+
+    override fun inject() {
+        injector.inject(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_edit)
 
-        intent.getParcelableExtra<Post>("post")?.let {
-            this.post = it
-
+        // TODO ViewModel로 상태 관리
+        intent.getParcelableExtra<Post>("post")?.let { post ->
+            vm.initViewModel(post)
             setupToolbar()
-            setupEditText(it)
-            post_edit_title.requestFocus()
+            setupEditText()
+
+            observe(vm.navigateBackToDetails) {
+                it.runIfNotHandled { cancel() }
+            }
+
+            observe(vm.navigateBackToDetailsWithData) {
+                it.getContentIfNotHandled()?.let { post ->
+                    completeEdit(post)
+                }
+            }
         } ?: run {
             toast("Error occurred!")
-            cancelEdit()
+            cancel()
         }
     }
 
@@ -41,17 +62,39 @@ class EditPostActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupEditText(it: Post) {
-        post_edit_title.setText(it.title, TextView.BufferType.EDITABLE)
-        post_edit_body.setText(it.body, TextView.BufferType.EDITABLE)
+    private fun setupEditText() {
+        observe(vm.postData) { post ->
+            post_edit_title.setText(post.title, TextView.BufferType.EDITABLE)
+            post_edit_body.setText(post.body, TextView.BufferType.EDITABLE)
+        }
+
+        post_edit_title.requestFocus()
+
+        compositeDisposable += post_edit_title.textChanges()
+            .map { it.toString() }
+            .subscribe(vm::updateTitle)
+
+        compositeDisposable += post_edit_body.textChanges()
+            .map { it.toString() }
+            .subscribe(vm::updateBody)
+    }
+
+    private fun cancel() {
+        setResult(Activity.RESULT_CANCELED)
+        finish()
+    }
+
+    private fun completeEdit(post: Post) {
+        setResult(Activity.RESULT_OK, Intent().putExtra("post", post))
+        finish()
     }
 
     override fun onBackPressed() {
-        cancelEdit()
+        cancel()
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        cancelEdit()
+        cancel()
         return true
     }
 
@@ -63,27 +106,10 @@ class EditPostActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.menu_edit_complete -> {
-                completeEdit(gatherData())
+                vm.clickEditComplete()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    private fun gatherData() = Post(
-        this.post.id,
-        this.post.userId,
-        post_edit_title.text.toString(),
-        post_edit_body.text.toString()
-    )
-
-    private fun completeEdit(post: Post) {
-        setResult(Activity.RESULT_OK, Intent().putExtra("post", post))
-        finish()
-    }
-
-    private fun cancelEdit() {
-        setResult(Activity.RESULT_CANCELED)
-        finish()
     }
 }

@@ -4,6 +4,7 @@ import com.turastory.simpleapp.dagger.module.app.ViewModelFactoryModule
 import com.turastory.simpleapp.dagger.module.app.ViewModelModule
 import com.turastory.simpleapp.dagger.scope.ActivityScope
 import com.turastory.simpleapp.ui.details.DetailsActivity
+import com.turastory.simpleapp.ui.edit.EditPostActivity
 import com.turastory.simpleapp.ui.main.MainActivity
 import dagger.Component
 
@@ -20,4 +21,5 @@ import dagger.Component
 interface AppComponent {
     fun inject(a: MainActivity)
     fun inject(a: DetailsActivity)
+    fun inject(a: EditPostActivity)
 }
