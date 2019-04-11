@@ -10,10 +10,9 @@ import javax.inject.Singleton
 
 @Module
 class RoomModule(application: Application) {
-    private val db: PostDatabase = Room.databaseBuilder(
+    private val db: PostDatabase = Room.inMemoryDatabaseBuilder(
         application,
-        PostDatabase::class.java,
-        "post-database"
+        PostDatabase::class.java
     ).build()
 
     @Singleton
