@@ -1,6 +1,5 @@
 package com.turastory.simpleapp.ui.main
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,9 +35,9 @@ class MainViewModel @Inject constructor(
     val navigateToDetails: LiveData<Event<Int>>
         get() = _navigateToDetails
 
-    private val _showDataCompleteToast = MutableLiveData<Event<Unit>>()
-    val showDeleteCompleteToast: LiveData<Event<Unit>>
-        get() = _showDataCompleteToast
+    private val _showDeleteCompleteToast = MutableLiveData<Event<Int>>()
+    val showDeleteCompleteToast: LiveData<Event<Int>>
+        get() = _showDeleteCompleteToast
 
     // internal
     private val compositeDisposable = CompositeDisposable()
@@ -73,13 +72,7 @@ class MainViewModel @Inject constructor(
         _navigateToDetails.value = Event(post.id)
     }
 
-    fun deletePost(postId: Int) {
-        compositeDisposable += repository.deletePost(postId)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                _showDataCompleteToast.value = Event(Unit)
-            }, {
-                Log.e("MainViewModel", "Error while deleting post - $it")
-            })
+    fun notifyPostDeleted(postId: Int) {
+        _showDeleteCompleteToast.value = Event(postId)
     }
 }

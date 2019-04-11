@@ -64,7 +64,7 @@ class MainActivity : BaseActivity() {
 
         vm.showDeleteCompleteToast.observe(this, Observer {
             it.getContentIfNotHandled()?.let {
-                toast("Deleting post complete!")
+                toast("Deleting post complete! - id: $it")
             }
         })
     }
@@ -114,7 +114,7 @@ class MainActivity : BaseActivity() {
             Activity.RESULT_OK -> {
                 data?.getIntExtra("deletedPostId", -1)?.let { id ->
                     if (id != -1) {
-                        vm.deletePost(id)
+                        vm.notifyPostDeleted(id)
                     }
                 }
             }
