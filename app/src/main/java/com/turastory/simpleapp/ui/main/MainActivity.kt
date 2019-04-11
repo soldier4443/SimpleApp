@@ -37,18 +37,7 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
 
         setupToolbar()
-        setupRecyclerView()
-        observeViewModel()
-    }
-
-    private fun observeViewModel() {
-        vm.posts.observe(this, Observer {
-            postAdapter.submitList(it)
-        })
-
-        vm.state.observe(this, Observer {
-            postAdapter.networkStateChanged(it)
-        })
+        setupPostList()
 
         vm.navigateToDetails.observe(this, Observer {
             it.getContentIfNotHandled()?.let { id ->
@@ -69,11 +58,7 @@ class MainActivity : BaseActivity() {
         })
     }
 
-    private fun setupToolbar() {
-        setSupportActionBar(main_toolbar)
-    }
-
-    private fun setupRecyclerView() {
+    private fun setupPostList() {
         val linearLayoutManager = LinearLayoutManager(this@MainActivity)
 
         content_list.apply {
@@ -99,6 +84,23 @@ class MainActivity : BaseActivity() {
                     })
             )
         }
+
+        vm.posts.observe(this, Observer {
+            val isEmpty = postAdapter.isEmpty()
+            postAdapter.submitList(it)
+
+            if (isEmpty) {
+                linearLayoutManager.scrollToPosition(0)
+            }
+        })
+
+        vm.state.observe(this, Observer {
+            postAdapter.networkStateChanged(it)
+        })
+    }
+
+    private fun setupToolbar() {
+        setSupportActionBar(main_toolbar)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -53,6 +53,8 @@ class PostAdapter : PagedListAdapter<Post, RecyclerView.ViewHolder>(DIFF_CALLBAC
         return super.getItemCount() + if (hasExtraRow()) 1 else 0
     }
 
+    fun isEmpty(): Boolean = super.getItemCount() == 0
+
     fun getItemAt(position: Int): Post? {
         return getItem(position)
     }
