@@ -44,26 +44,20 @@ class MainViewModel @Inject constructor(
     }
 
     init {
-        loadPosts()
+        loadPostsInitial()
     }
 
-    // called from view
-
-    fun loadPosts() {
+    private fun loadPostsInitial() {
         repository.getPosts()
             .apply {
-                compositeDisposable += networkState
+                compositeDisposable += this
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ networkState ->
-                        _state.value = networkState
-                    }, {
-                        _state.value = NetworkState.error(it)
-                    })
-
-                compositeDisposable += pagedList
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe {
+                        _state.value = NetworkState.LOADING
+                    }
                     .subscribe({ posts ->
                         _posts.value = posts
+                        _state.value = NetworkState.LOADED
                     }, {
                         _state.value = NetworkState.error(it)
                     })

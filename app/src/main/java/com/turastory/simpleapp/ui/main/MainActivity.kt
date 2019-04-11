@@ -4,17 +4,14 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.turastory.simpleapp.R
 import com.turastory.simpleapp.base.BaseActivity
-import com.turastory.simpleapp.ext.getViewModel
 import com.turastory.simpleapp.ext.injector
 import com.turastory.simpleapp.ext.toast
 import com.turastory.simpleapp.ui.details.DetailsActivity
-import com.turastory.simpleapp.ui.main.adapter.NewPostAdapter
-import com.turastory.simpleapp.util.InfiniteScrollListener
+import com.turastory.simpleapp.ui.main.adapter.PostAdapter
 import com.turastory.simpleapp.util.RecyclerViewItemClickListener
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
@@ -27,10 +24,9 @@ class MainActivity : BaseActivity() {
 
     // Get ViewModel
     @Inject
-    lateinit var vmf: ViewModelProvider.Factory
-    private val vm: MainViewModel by lazy { getViewModel<MainViewModel>(vmf) }
+    lateinit var vm: MainViewModel
 
-    private val postAdapter = NewPostAdapter()
+    private val postAdapter = PostAdapter()
 
     override fun inject() {
         injector.inject(this)
@@ -85,12 +81,6 @@ class MainActivity : BaseActivity() {
                     linearLayoutManager.orientation
                 )
             )
-
-            addOnScrollListener(InfiniteScrollListener(linearLayoutManager) {
-                this.post {
-                    vm.loadPosts()
-                }
-            })
 
             addOnItemTouchListener(
                 RecyclerViewItemClickListener(

@@ -2,14 +2,17 @@ package com.turastory.simpleapp.data.source
 
 import android.util.Log
 import androidx.paging.DataSource
-import androidx.paging.PositionalDataSource
+import androidx.paging.PageKeyedDataSource
 import com.turastory.simpleapp.api.PostApiService
 import com.turastory.simpleapp.vo.Post
-import io.reactivex.subjects.BehaviorSubject
 
 // 일단 그냥 subscribe call하는 것으로 구현
 // composite disposable을 받는게 좋을까?
-class PostDataSource(private val postApiService: PostApiService) : PositionalDataSource<Post>() {
+class PostDataSource(private val postApiService: PostApiService) : PageKeyedDataSource<Int, Post>() {
+
+    companion object {
+        const val TAG = "PostDataSource"
+    }
 
     class Factory(private val postApiService: PostApiService) : DataSource.Factory<Int, Post>() {
         override fun create(): DataSource<Int, Post> {
@@ -17,32 +20,26 @@ class PostDataSource(private val postApiService: PostApiService) : PositionalDat
         }
     }
 
-    val networkStateStream: BehaviorSubject<NetworkState> = BehaviorSubject.create()
-
-    override fun loadRange(params: LoadRangeParams, callback: LoadRangeCallback<Post>) {
-        Log.e("asdf", "load range called: [${params.startPosition}, ${params.loadSize}]")
-        postApiService.getPosts(params.startPosition, params.loadSize)
-            .doOnSubscribe { networkStateStream.onNext(NetworkState.LOADING) }
+    override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, Post>) {
+        Log.d(TAG, "load initial called: [0, ${params.requestedLoadSize}]")
+        postApiService.getPosts(0, params.requestedLoadSize)
             .doOnSuccess {
-                callback.onResult(it)
-                networkStateStream.onNext(NetworkState.LOADED)
-            }
-            .doOnError {
-                networkStateStream.onNext(NetworkState.error(it.message ?: "Unknown Error"))
+                callback.onResult(it, 0, params.requestedLoadSize)
             }
             .subscribe()
     }
 
-    override fun loadInitial(params: LoadInitialParams, callback: LoadInitialCallback<Post>) {
-        Log.e("asdf", "load initial called: [${params.requestedStartPosition}, ${params.requestedLoadSize}]")
-        postApiService.getPosts(params.requestedStartPosition, params.requestedLoadSize)
-            .doOnSubscribe { networkStateStream.onNext(NetworkState.LOADING) }
+    override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Post>) {
+        Log.d(TAG, "load range called: [${params.key}, ${params.requestedLoadSize}]")
+        val nextPageKey = params.key + params.requestedLoadSize
+        postApiService.getPosts(params.key, params.requestedLoadSize)
             .doOnSuccess {
-                callback.onResult(it, params.requestedStartPosition, params.requestedLoadSize)
-            }
-            .doOnError {
-                networkStateStream.onNext(NetworkState.error(it.message ?: "Unknown Error"))
+                callback.onResult(it, nextPageKey)
             }
             .subscribe()
+    }
+
+    override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, Post>) {
+        // We don't have anything to load before.
     }
 }

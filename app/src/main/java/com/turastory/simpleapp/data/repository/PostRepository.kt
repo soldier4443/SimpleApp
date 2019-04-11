@@ -1,5 +1,6 @@
 package com.turastory.simpleapp.data.repository
 
+import androidx.paging.PagedList
 import androidx.paging.toObservable
 import com.turastory.simpleapp.api.PostApiService
 import com.turastory.simpleapp.data.Repository
@@ -8,6 +9,7 @@ import com.turastory.simpleapp.data.source.PostRemoteDataSource
 import com.turastory.simpleapp.vo.Comment
 import com.turastory.simpleapp.vo.Post
 import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -17,20 +19,17 @@ class PostRepository(
     private val remoteDataSource: PostRemoteDataSource
 ) : Repository {
 
-    fun getPosts(): PostResult {
+    fun getPosts(): Observable<PagedList<Post>> {
         val sourceFactory = PostDataSource.Factory(postApiService)
-        val dataSource = sourceFactory.create() as PostDataSource
 
-        val sf = sourceFactory.toObservable(
-            pageSize = 20,
+        return sourceFactory.toObservable(
+            PagedList.Config.Builder()
+                .setPageSize(10)
+                .setMaxSize(PagedList.Config.MAX_SIZE_UNBOUNDED)
+                .build(),
             initialLoadKey = 0,
             fetchScheduler = Schedulers.io(),
             notifyScheduler = AndroidSchedulers.mainThread()
-        )
-
-        return PostResult(
-            sf,
-            dataSource.networkStateStream
         )
     }
 

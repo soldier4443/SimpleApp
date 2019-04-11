@@ -8,15 +8,17 @@ import com.turastory.simpleapp.R
 import com.turastory.simpleapp.data.source.NetworkState
 import com.turastory.simpleapp.vo.Post
 
-val diffCallback = object : DiffUtil.ItemCallback<Post>() {
-    override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean =
-        oldItem.id == newItem.id
+class PostAdapter : PagedListAdapter<Post, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
 
-    override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean =
-        oldItem == newItem
-}
+    companion object {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Post>() {
+            override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean =
+                oldItem.id == newItem.id
 
-class NewPostAdapter : PagedListAdapter<Post, RecyclerView.ViewHolder>(diffCallback) {
+            override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean =
+                oldItem == newItem
+        }
+    }
 
     private var networkState: NetworkState? = null
 
@@ -35,7 +37,8 @@ class NewPostAdapter : PagedListAdapter<Post, RecyclerView.ViewHolder>(diffCallb
         }
     }
 
-    private fun hasExtraRow() = networkState != null && networkState != NetworkState.LOADED
+    private fun hasExtraRow() =
+        networkState != null && networkState != NetworkState.LOADED
 
     override fun getItemViewType(position: Int): Int {
         return if (hasExtraRow() && position == itemCount - 1) {

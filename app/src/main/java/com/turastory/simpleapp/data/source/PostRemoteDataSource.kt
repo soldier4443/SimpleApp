@@ -8,10 +8,6 @@ import io.reactivex.Single
 
 class PostRemoteDataSource(private val api: PostApiService) {
 
-    fun getPosts(start: Int, limit: Int): Single<List<Post>> {
-        return api.getPosts(start, limit)
-    }
-
     fun getPost(postId: Int): Single<Post> {
         return api.getPost(postId)
     }
