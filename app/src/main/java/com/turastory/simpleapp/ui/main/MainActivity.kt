@@ -61,6 +61,10 @@ class MainActivity : BaseActivity() {
                 )
             }
         })
+
+        vm.showDeleteCompleteToast.observe(this, Observer {
+            toast("Deleting post complete!")
+        })
     }
 
     private fun setupToolbar() {
@@ -87,7 +91,9 @@ class MainActivity : BaseActivity() {
                     this@MainActivity,
                     this,
                     { _, pos ->
-                        vm.clickPostItemOn(pos)
+                        postAdapter.getItemAt(pos)?.let { post ->
+                            vm.clickPostItem(post)
+                        }
                     })
             )
         }
@@ -106,7 +112,6 @@ class MainActivity : BaseActivity() {
             Activity.RESULT_OK -> {
                 data?.getIntExtra("deletedPostId", -1)?.let { id ->
                     if (id != -1) {
-                        toast("Deleting post complete!")
                         vm.deletePost(id)
                     }
                 }

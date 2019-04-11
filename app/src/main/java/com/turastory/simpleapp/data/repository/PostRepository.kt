@@ -22,23 +22,24 @@ class PostRepository(
     private val postDao = db.postDao()
 
     fun getPosts(): Observable<PagedList<Post>> {
+        val initialLoadKey = 1
         val pageSize = 10
 
         val boundaryCallback = PostBoundaryCallback(
-            initialLoadSize = pageSize * 5,
-            loadSize = pageSize * 3,
+            initialLoadKey,
+            loadSize = pageSize * 2,
             api = postApiService,
             loadCallback = { posts ->
                 db.runInTransaction {
                     // Room automatically invalidates when the data changes
                     postDao.insert(posts)
-                    Log.e("asdf", "Items inserted in the database correctly")
+                    Log.d("PostRepository", "Items inserted in the database correctly")
                 }
             })
 
         return postDao.getAll().toObservable(
             pageSize,
-            initialLoadKey = 0,
+            initialLoadKey,
             boundaryCallback = boundaryCallback,
             fetchScheduler = Schedulers.io(),
             notifyScheduler = AndroidSchedulers.mainThread()
@@ -55,7 +56,8 @@ class PostRepository(
     }
 
     fun deletePost(postId: Int): Completable {
-        return postApiService.deletePost(postId)
+        return postDao.deleteById(postId)
+            .subscribeOn(Schedulers.io())
     }
 
     fun updatePost(postId: Int, newPostData: Post): Single<Post> {

@@ -1,5 +1,6 @@
 package com.turastory.simpleapp.ui.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -35,6 +36,10 @@ class MainViewModel @Inject constructor(
     val navigateToDetails: LiveData<Event<Int>>
         get() = _navigateToDetails
 
+    private val _showDataCompleteToast = MutableLiveData<Event<Unit>>()
+    val showDeleteCompleteToast: LiveData<Event<Unit>>
+        get() = _showDataCompleteToast
+
     // internal
     private val compositeDisposable = CompositeDisposable()
 
@@ -48,30 +53,33 @@ class MainViewModel @Inject constructor(
     }
 
     private fun loadPostsInitial() {
-        repository.getPosts()
-            .apply {
-                compositeDisposable += this
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnNext {
-                        // 매 번 스트림이 발생할 때마다 상태를 변경하는 게 맞음
-                        _state.value = NetworkState.LOADING
-                    }
-                    .subscribe({ posts ->
-                        if (posts.size > 0) {
-                            _posts.value = posts
-                            _state.value = NetworkState.LOADED
-                        }
-                    }, {
-                        _state.value = NetworkState.error(it)
-                    })
+        compositeDisposable += repository.getPosts()
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnNext {
+                // 매 번 스트림이 발생할 때마다 상태를 변경하는 게 맞음
+                _state.value = NetworkState.LOADING
             }
+            .subscribe({ posts ->
+                if (posts.size > 0) {
+                    _posts.value = posts
+                    _state.value = NetworkState.LOADED
+                }
+            }, {
+                _state.value = NetworkState.error(it)
+            })
     }
 
-    fun clickPostItemOn(pos: Int) {
-        _navigateToDetails.value = Event(pos)
+    fun clickPostItem(post: Post) {
+        _navigateToDetails.value = Event(post.id)
     }
 
-    fun deletePost(id: Int) {
-        // Search
+    fun deletePost(postId: Int) {
+        compositeDisposable += repository.deletePost(postId)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                _showDataCompleteToast.value = Event(Unit)
+            }, {
+                Log.e("asdf", "Error while deleting post - $it")
+            })
     }
 }

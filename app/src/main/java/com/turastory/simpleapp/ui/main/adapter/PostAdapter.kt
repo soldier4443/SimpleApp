@@ -1,6 +1,5 @@
 package com.turastory.simpleapp.ui.main.adapter
 
-import android.util.Log
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -54,11 +53,11 @@ class PostAdapter : PagedListAdapter<Post, RecyclerView.ViewHolder>(DIFF_CALLBAC
         return super.getItemCount() + if (hasExtraRow()) 1 else 0
     }
 
+    fun getItemAt(position: Int): Post? {
+        return getItem(position)
+    }
+
     fun networkStateChanged(networkState: NetworkState) {
-        Log.e(
-            "asdf", "Network State changed: " +
-                    "[${this.networkState?.state}] -> [${networkState.state}]"
-        )
         val previousState = this.networkState
         val hadExtraRow = hasExtraRow()
         this.networkState = networkState
