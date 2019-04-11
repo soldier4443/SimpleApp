@@ -2,12 +2,16 @@ package com.turastory.simpleapp.vo
 
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity(tableName = "post")
 data class Post(
-    val id: Int,
-    val userId: Int,
-    val title: String,
-    val body: String
+    @PrimaryKey val id: Int,
+    @ColumnInfo(name = "user_id") val userId: Int,
+    @ColumnInfo(name = "title") val title: String,
+    @ColumnInfo(name = "body") val body: String
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(

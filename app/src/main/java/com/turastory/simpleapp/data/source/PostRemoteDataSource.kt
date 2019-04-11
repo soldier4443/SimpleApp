@@ -7,7 +7,6 @@ import io.reactivex.Completable
 import io.reactivex.Single
 
 class PostRemoteDataSource(private val api: PostApiService) {
-
     fun getPost(postId: Int): Single<Post> {
         return api.getPost(postId)
     }

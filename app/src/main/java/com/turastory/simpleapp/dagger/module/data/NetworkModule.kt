@@ -1,7 +1,6 @@
-package com.turastory.simpleapp.dagger.module
+package com.turastory.simpleapp.dagger.module.data
 
 import com.turastory.simpleapp.api.PostApiService
-import com.turastory.simpleapp.data.repository.PostRepository
 import com.turastory.simpleapp.data.source.PostRemoteDataSource
 import dagger.Module
 import dagger.Provides
@@ -25,17 +24,8 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideDataSource(apiService: PostApiService): PostRemoteDataSource {
+    fun provideRemoteDataSource(apiService: PostApiService): PostRemoteDataSource {
         return PostRemoteDataSource(apiService)
-    }
-
-    @Provides
-    @Singleton
-    fun provideRepository(
-        apiService: PostApiService,
-        dataSource: PostRemoteDataSource
-    ): PostRepository {
-        return PostRepository(apiService, dataSource)
     }
 
     private val retrofitBuilder: Retrofit.Builder = Retrofit.Builder()

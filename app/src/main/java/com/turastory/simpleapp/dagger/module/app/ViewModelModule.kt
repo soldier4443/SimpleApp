@@ -1,4 +1,4 @@
-package com.turastory.simpleapp.dagger.module
+package com.turastory.simpleapp.dagger.module.app
 
 import androidx.lifecycle.ViewModel
 import com.turastory.simpleapp.dagger.ViewModelKey

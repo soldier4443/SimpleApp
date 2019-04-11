@@ -35,6 +35,13 @@ dependencies {
     def lifecycleVersion = '2.0.0'
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
 
+    // Room persistence library
+    def roomVersion = '2.1.0-alpha06'
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
+    implementation "androidx.room:room-rxjava2:$roomVersion"
+
     // Paging Library
     def pagingLibVersion = '2.1.0'
     implementation "androidx.paging:paging-runtime-ktx:$pagingLibVersion"

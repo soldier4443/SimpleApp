@@ -4,7 +4,8 @@ import android.app.Application
 import com.turastory.simpleapp.dagger.DaggerComponentProvider
 import com.turastory.simpleapp.dagger.component.AppComponent
 import com.turastory.simpleapp.dagger.component.DaggerAppComponent
-import com.turastory.simpleapp.dagger.component.DaggerNetworkComponent
+import com.turastory.simpleapp.dagger.component.DaggerDataComponent
+import com.turastory.simpleapp.dagger.module.data.RoomModule
 
 class SimpleApplication : Application(), DaggerComponentProvider {
 
@@ -17,8 +18,12 @@ class SimpleApplication : Application(), DaggerComponentProvider {
     }
 
     private fun initDagger() {
+        val dataComponent = DaggerDataComponent.builder()
+            .roomModule(RoomModule(this))
+            .build()
+
         appComponent = DaggerAppComponent.builder()
-            .networkComponent(DaggerNetworkComponent.create())
+            .dataComponent(dataComponent)
             .build()
     }
 
