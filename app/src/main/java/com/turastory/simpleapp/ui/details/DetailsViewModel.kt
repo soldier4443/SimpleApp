@@ -8,6 +8,7 @@ import com.turastory.simpleapp.data.repository.PostRepository
 import com.turastory.simpleapp.data.source.NetworkState
 import com.turastory.simpleapp.ext.plusAssign
 import com.turastory.simpleapp.ui.Event
+import com.turastory.simpleapp.ui.SimpleEvent
 import com.turastory.simpleapp.vo.Comment
 import com.turastory.simpleapp.vo.Post
 import io.reactivex.Single
@@ -36,12 +37,12 @@ class DetailsViewModel @Inject constructor(
     val state: LiveData<NetworkState>
         get() = _state
 
-    private val _showDeleteConfirmDialog = MutableLiveData<Event<Unit>>()
-    val showDeleteConfirmDialog: LiveData<Event<Unit>>
+    private val _showDeleteConfirmDialog = MutableLiveData<SimpleEvent>()
+    val showDeleteConfirmDialog: LiveData<SimpleEvent>
         get() = _showDeleteConfirmDialog
 
-    private val _showUpdateCompleteToast = MutableLiveData<Event<Unit>>()
-    val showUpdateCompleteToast: LiveData<Event<Unit>>
+    private val _showUpdateCompleteToast = MutableLiveData<SimpleEvent>()
+    val showUpdateCompleteToast: LiveData<SimpleEvent>
         get() = _showUpdateCompleteToast
 
     private val _navigateBackToMain = MutableLiveData<Event<Int>>()
@@ -104,14 +105,14 @@ class DetailsViewModel @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 _postDetails.value = post
-                _showUpdateCompleteToast.value = Event(Unit)
+                _showUpdateCompleteToast.value = SimpleEvent()
             }, {
                 Log.e(TAG, "Error while updating post ${post.id}")
             })
     }
 
     fun clickDeletePost() {
-        _showDeleteConfirmDialog.value = Event(Unit)
+        _showDeleteConfirmDialog.value = SimpleEvent()
     }
 
     fun clickEditPost() {

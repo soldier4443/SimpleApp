@@ -126,11 +126,11 @@ class DetailsActivity : BaseActivity() {
 
     private fun setupDialog() {
         vm.showDeleteConfirmDialog.observe(this, Observer {
-            showConfirmDialog()
+            it.runIfNotHandled { showConfirmDialog() }
         })
 
         vm.showUpdateCompleteToast.observe(this, Observer {
-            toast("Update post complete!")
+            it.runIfNotHandled { toast("Update post complete!") }
         })
     }
 
