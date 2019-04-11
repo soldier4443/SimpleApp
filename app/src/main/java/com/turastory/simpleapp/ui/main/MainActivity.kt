@@ -63,7 +63,9 @@ class MainActivity : BaseActivity() {
         })
 
         vm.showDeleteCompleteToast.observe(this, Observer {
-            toast("Deleting post complete!")
+            it.getContentIfNotHandled()?.let {
+                toast("Deleting post complete!")
+            }
         })
     }
 
