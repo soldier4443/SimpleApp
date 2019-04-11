@@ -3,12 +3,12 @@ package com.turastory.simpleapp.ui.main
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.turastory.simpleapp.R
 import com.turastory.simpleapp.base.BaseActivity
 import com.turastory.simpleapp.ext.injector
+import com.turastory.simpleapp.ext.observe
 import com.turastory.simpleapp.ext.toast
 import com.turastory.simpleapp.ui.details.DetailsActivity
 import com.turastory.simpleapp.ui.main.adapter.PostAdapter
@@ -39,7 +39,7 @@ class MainActivity : BaseActivity() {
         setupToolbar()
         setupPostList()
 
-        vm.navigateToDetails.observe(this, Observer {
+        observe(vm.navigateToDetails) {
             it.getContentIfNotHandled()?.let { id ->
                 val intent = Intent(this, DetailsActivity::class.java)
                     .putExtra("postId", id)
@@ -49,13 +49,13 @@ class MainActivity : BaseActivity() {
                     REQUEST_DETAILS
                 )
             }
-        })
+        }
 
-        vm.showDeleteCompleteToast.observe(this, Observer {
+        observe(vm.showDeleteCompleteToast) {
             it.getContentIfNotHandled()?.let {
                 toast("Deleting post complete! - id: $it")
             }
-        })
+        }
     }
 
     private fun setupPostList() {
@@ -85,18 +85,18 @@ class MainActivity : BaseActivity() {
             )
         }
 
-        vm.posts.observe(this, Observer {
+        observe(vm.posts) {
             val isEmpty = postAdapter.isEmpty()
             postAdapter.submitList(it)
 
             if (isEmpty) {
                 linearLayoutManager.scrollToPosition(0)
             }
-        })
+        }
 
-        vm.state.observe(this, Observer {
+        observe(vm.state) {
             postAdapter.networkStateChanged(it)
-        })
+        }
     }
 
     private fun setupToolbar() {

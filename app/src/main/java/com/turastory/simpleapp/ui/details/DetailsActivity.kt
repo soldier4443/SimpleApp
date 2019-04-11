@@ -6,15 +6,11 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.turastory.simpleapp.R
 import com.turastory.simpleapp.base.BaseActivity
 import com.turastory.simpleapp.data.source.State
-import com.turastory.simpleapp.ext.hide
-import com.turastory.simpleapp.ext.injector
-import com.turastory.simpleapp.ext.show
-import com.turastory.simpleapp.ext.toast
+import com.turastory.simpleapp.ext.*
 import com.turastory.simpleapp.ui.edit.EditPostActivity
 import com.turastory.simpleapp.vo.Comment
 import com.turastory.simpleapp.vo.Post
@@ -64,21 +60,21 @@ class DetailsActivity : BaseActivity() {
     private fun loadPostDetails(postId: Int) {
         vm.initPostId(postId)
 
-        vm.postDetails.observe(this, Observer { post ->
+        observe(vm.postDetails) { post ->
             showPostDetails(post)
-        })
+        }
 
-        vm.comments.observe(this, Observer { comments ->
+        observe(vm.comments) { comments ->
             showComments(comments)
-        })
+        }
 
-        vm.state.observe(this, Observer { networkState ->
+        observe(vm.state) { networkState ->
             when (networkState.state) {
                 State.LOADING -> showLoadingPage()
                 State.LOADED -> hideLoadingPage()
                 State.FAILED -> hideLoadingPage()
             }
-        })
+        }
     }
 
     private fun showPostDetails(post: Post) {
@@ -101,7 +97,7 @@ class DetailsActivity : BaseActivity() {
     private fun hideLoadingPage() = loading_page.hide()
 
     private fun setupNavigation() {
-        vm.navigateBackToMain.observe(this, Observer {
+        observe(vm.navigateBackToMain) {
             it.getContentIfNotHandled()?.let { deletedPostId ->
                 setResult(
                     Activity.RESULT_OK,
@@ -109,9 +105,9 @@ class DetailsActivity : BaseActivity() {
                 )
                 finish()
             }
-        })
+        }
 
-        vm.navigateToEditPost.observe(this, Observer {
+        observe(vm.navigateToEditPost) {
             it.getContentIfNotHandled()?.let { post ->
                 val intent = Intent(this, EditPostActivity::class.java)
                     .putExtra("post", post)
@@ -121,17 +117,17 @@ class DetailsActivity : BaseActivity() {
                     REQUEST_POST_EDIT
                 )
             }
-        })
+        }
     }
 
     private fun setupDialog() {
-        vm.showDeleteConfirmDialog.observe(this, Observer {
+        observe(vm.showDeleteConfirmDialog) {
             it.runIfNotHandled { showConfirmDialog() }
-        })
+        }
 
-        vm.showUpdateCompleteToast.observe(this, Observer {
+        observe(vm.showUpdateCompleteToast) {
             it.runIfNotHandled { toast("Update post complete!") }
-        })
+        }
     }
 
     private fun showConfirmDialog() {
