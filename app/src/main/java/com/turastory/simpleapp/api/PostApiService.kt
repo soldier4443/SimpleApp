@@ -9,7 +9,7 @@ import retrofit2.http.*
 interface PostApiService {
     @GET("posts")
     fun getPosts(
-        @Query("_start") start: Int,
+        @Query("_page") page: Int,
         @Query("_limit") limit: Int
     ): Single<List<Post>>
 
