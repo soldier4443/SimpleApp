@@ -52,7 +52,8 @@ class MainViewModel @Inject constructor(
             .apply {
                 compositeDisposable += this
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe {
+                    .doOnNext {
+                        // 매 번 스트림이 발생할 때마다 상태를 변경하는 게 맞음
                         _state.value = NetworkState.LOADING
                     }
                     .subscribe({ posts ->
