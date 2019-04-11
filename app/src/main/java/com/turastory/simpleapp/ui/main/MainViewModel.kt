@@ -56,8 +56,10 @@ class MainViewModel @Inject constructor(
                         _state.value = NetworkState.LOADING
                     }
                     .subscribe({ posts ->
-                        _posts.value = posts
-                        _state.value = NetworkState.LOADED
+                        if (posts.size > 0) {
+                            _posts.value = posts
+                            _state.value = NetworkState.LOADED
+                        }
                     }, {
                         _state.value = NetworkState.error(it)
                     })

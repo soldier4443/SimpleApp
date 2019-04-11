@@ -1,10 +1,10 @@
 package com.turastory.simpleapp.data.repository
 
+import android.util.Log
 import androidx.paging.PagedList
 import androidx.paging.toObservable
 import com.turastory.simpleapp.api.PostApiService
 import com.turastory.simpleapp.data.Repository
-import com.turastory.simpleapp.data.source.PostDataSource
 import com.turastory.simpleapp.db.PostDatabase
 import com.turastory.simpleapp.vo.Comment
 import com.turastory.simpleapp.vo.Post
@@ -19,22 +19,35 @@ class PostRepository(
     private val db: PostDatabase
 ) : Repository {
 
-    private val sourceFactory = PostDataSource.Factory(postApiService)
+    private val postDao = db.postDao()
 
     fun getPosts(): Observable<PagedList<Post>> {
-        return sourceFactory.toObservable(
-            PagedList.Config.Builder()
-                .setPageSize(10)
-                .setMaxSize(PagedList.Config.MAX_SIZE_UNBOUNDED)
-                .build(),
+        val pageSize = 10
+
+        val boundaryCallback = PostBoundaryCallback(
+            initialLoadSize = pageSize * 5,
+            loadSize = pageSize * 3,
+            api = postApiService,
+            loadCallback = { posts ->
+                db.runInTransaction {
+                    // Room automatically invalidates when the data changes
+                    postDao.insert(posts)
+                    Log.e("asdf", "Items inserted in the database correctly")
+                }
+            })
+
+        return postDao.getAll().toObservable(
+            pageSize,
             initialLoadKey = 0,
+            boundaryCallback = boundaryCallback,
             fetchScheduler = Schedulers.io(),
             notifyScheduler = AndroidSchedulers.mainThread()
         )
     }
 
+    // Suppose we already loaded posts for local use.
     fun getPost(postId: Int): Single<Post> {
-        return postApiService.getPost(postId)
+        return postDao.getPostById(postId)
     }
 
     fun getComments(postId: Int): Single<List<Comment>> {
