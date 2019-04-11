@@ -1,6 +1,5 @@
 package com.turastory.simpleapp.dagger.component
 
-import com.turastory.simpleapp.dagger.module.app.AppModule
 import com.turastory.simpleapp.dagger.module.app.ViewModelFactoryModule
 import com.turastory.simpleapp.dagger.module.app.ViewModelModule
 import com.turastory.simpleapp.dagger.scope.ActivityScope
@@ -11,7 +10,6 @@ import dagger.Component
 @ActivityScope
 @Component(
     modules = [
-        AppModule::class,
         ViewModelFactoryModule::class,
         ViewModelModule::class
     ],
@@ -20,7 +18,6 @@ import dagger.Component
     ]
 )
 interface AppComponent {
-
     fun inject(a: MainActivity)
     fun inject(a: DetailsActivity)
 }

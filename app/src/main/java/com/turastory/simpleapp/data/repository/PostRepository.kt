@@ -49,10 +49,12 @@ class PostRepository(
     // Suppose we already loaded posts for local use.
     fun getPost(postId: Int): Single<Post> {
         return postDao.getPostById(postId)
+            .subscribeOn(Schedulers.io())
     }
 
     fun getComments(postId: Int): Single<List<Comment>> {
         return postApiService.getComments(postId)
+            .subscribeOn(Schedulers.io())
     }
 
     fun deletePost(postId: Int): Completable {
@@ -60,7 +62,8 @@ class PostRepository(
             .subscribeOn(Schedulers.io())
     }
 
-    fun updatePost(postId: Int, newPostData: Post): Single<Post> {
-        return postApiService.updatePost(postId, newPostData)
+    fun updatePost(newPost: Post): Completable {
+        return postDao.updatePost(newPost)
+            .subscribeOn(Schedulers.io())
     }
 }

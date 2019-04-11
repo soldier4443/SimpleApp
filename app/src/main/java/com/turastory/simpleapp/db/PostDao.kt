@@ -1,10 +1,7 @@
 package com.turastory.simpleapp.db
 
 import androidx.paging.DataSource
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.turastory.simpleapp.vo.Post
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -22,4 +19,7 @@ interface PostDao {
 
     @Query("DELETE FROM post WHERE id = (:id)")
     fun deleteById(id: Int): Completable
+
+    @Update
+    fun updatePost(newPost: Post): Completable
 }
