@@ -17,7 +17,7 @@ class PostBoundaryCallback(
 
     override fun onZeroItemsLoaded() {
         // No data exists in DB. should fetch data from the api.
-        Log.e("asdf", "No data exists in DB. should fetch data from the api.")
+        Log.d("PostBoundaryCallback", "No data exists in DB. should fetch data from the api.")
         api.getPosts(initialLoadKey, loadSize)
             .subscribeOn(Schedulers.io())
             .doOnSuccess { posts ->
@@ -26,14 +26,14 @@ class PostBoundaryCallback(
                 }
             }
             .doOnError {
-                Log.e("asdf", "Error while fetching posts from the network in onZeroItemLoaded()")
+                Log.e("PostBoundaryCallback", "Error while fetching posts from the network in onZeroItemLoaded()")
             }
             .subscribe()
     }
 
     override fun onItemAtEndLoaded(itemAtEnd: Post) {
         // End of our database reached. should fetch data from the api.
-        Log.e("asdf", "End of our database reached. should fetch data from the api.")
+        Log.d("PostBoundaryCallback", "End of our database reached. should fetch data from the api.")
         val nextPage = itemAtEnd.id / loadSize + initialLoadKey
         api.getPosts(nextPage, loadSize)
             .subscribeOn(Schedulers.io())
@@ -43,7 +43,7 @@ class PostBoundaryCallback(
                 }
             }
             .doOnError {
-                Log.e("asdf", "Error while fetching posts from the network in onItemAtEndLoaded()")
+                Log.e("PostBoundaryCallback", "Error while fetching posts from the network in onItemAtEndLoaded()")
             }
             .subscribe()
     }

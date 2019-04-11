@@ -79,7 +79,7 @@ class MainViewModel @Inject constructor(
             .subscribe({
                 _showDataCompleteToast.value = Event(Unit)
             }, {
-                Log.e("asdf", "Error while deleting post - $it")
+                Log.e("MainViewModel", "Error while deleting post - $it")
             })
     }
 }
