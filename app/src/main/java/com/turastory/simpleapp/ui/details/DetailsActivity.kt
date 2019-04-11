@@ -46,6 +46,11 @@ class DetailsActivity : BaseActivity(), DetailsContract.View {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.cleanUp()
+    }
+
     private fun setupToolbar() {
         setSupportActionBar(details_toolbar)
 
