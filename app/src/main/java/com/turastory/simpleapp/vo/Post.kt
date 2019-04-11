@@ -2,14 +2,13 @@ package com.turastory.simpleapp.vo
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.turastory.simpleapp.util.ViewType
 
 data class Post(
     val id: Int,
     val userId: Int,
     val title: String,
     val body: String
-) : ViewType, Parcelable {
+) : Parcelable {
 
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
@@ -17,10 +16,6 @@ data class Post(
         parcel.readString() ?: "",
         parcel.readString() ?: ""
     )
-
-    override fun getViewType(): Int {
-        return ViewType.CONTENT
-    }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(id)
