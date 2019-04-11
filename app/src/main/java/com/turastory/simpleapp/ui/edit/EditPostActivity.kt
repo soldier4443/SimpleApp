@@ -1,18 +1,18 @@
-package com.turastory.simpleapp.ui.postedit
+package com.turastory.simpleapp.ui.edit
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.turastory.simpleapp.R
 import com.turastory.simpleapp.ext.toast
 import com.turastory.simpleapp.vo.Post
 import kotlinx.android.synthetic.main.activity_post_edit.*
 
-class PostEditActivity : AppCompatActivity() {
+class EditPostActivity : AppCompatActivity() {
 
     private lateinit var post: Post
 

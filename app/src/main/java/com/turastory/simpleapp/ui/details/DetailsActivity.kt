@@ -15,7 +15,7 @@ import com.turastory.simpleapp.ext.hide
 import com.turastory.simpleapp.ext.injector
 import com.turastory.simpleapp.ext.show
 import com.turastory.simpleapp.ext.toast
-import com.turastory.simpleapp.ui.postedit.PostEditActivity
+import com.turastory.simpleapp.ui.edit.EditPostActivity
 import com.turastory.simpleapp.vo.Comment
 import com.turastory.simpleapp.vo.Post
 import kotlinx.android.synthetic.main.activity_details.*
@@ -113,7 +113,7 @@ class DetailsActivity : BaseActivity() {
 
         vm.navigateToEditPost.observe(this, Observer {
             it.getContentIfNotHandled()?.let { post ->
-                val intent = Intent(this, PostEditActivity::class.java)
+                val intent = Intent(this, EditPostActivity::class.java)
                     .putExtra("post", post)
 
                 startActivityForResult(
