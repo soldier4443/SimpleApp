@@ -5,16 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.TextView
-import com.jakewharton.rxbinding3.widget.textChanges
 import com.turastory.simpleapp.R
 import com.turastory.simpleapp.base.BaseActivity
+import com.turastory.simpleapp.databinding.ActivityPostEditBinding
+import com.turastory.simpleapp.ext.bind
 import com.turastory.simpleapp.ext.injector
 import com.turastory.simpleapp.ext.observe
-import com.turastory.simpleapp.ext.plusAssign
 import com.turastory.simpleapp.ext.toast
 import com.turastory.simpleapp.vo.Post
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_post_edit.*
 import javax.inject.Inject
 
@@ -22,7 +20,6 @@ class EditPostActivity : BaseActivity() {
 
     @Inject
     lateinit var vm: EditPostViewModel
-    private val compositeDisposable = CompositeDisposable()
 
     override fun inject() {
         injector.inject(this)
@@ -30,7 +27,9 @@ class EditPostActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_post_edit)
+        val binding = bind<ActivityPostEditBinding>(R.layout.activity_post_edit)
+        binding.vm = vm
+        binding.lifecycleOwner = this
 
         // TODO ViewModel로 상태 관리
         intent.getParcelableExtra<Post>("post")?.let { post ->
@@ -63,20 +62,7 @@ class EditPostActivity : BaseActivity() {
     }
 
     private fun setupEditText() {
-        observe(vm.postData) { post ->
-            post_edit_title.setText(post.title, TextView.BufferType.EDITABLE)
-            post_edit_body.setText(post.body, TextView.BufferType.EDITABLE)
-        }
-
         post_edit_title.requestFocus()
-
-        compositeDisposable += post_edit_title.textChanges()
-            .map { it.toString() }
-            .subscribe(vm::updateTitle)
-
-        compositeDisposable += post_edit_body.textChanges()
-            .map { it.toString() }
-            .subscribe(vm::updateBody)
     }
 
     private fun cancel() {

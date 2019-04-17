@@ -23,11 +23,11 @@ class CommentAdapter : RecyclerView.Adapter<CommentAdapter.ViewHolder>() {
         return holder.bind(comments[position])
     }
 
-    fun setComments(comments: List<Comment>) {
+    fun submitComments(comments: List<Comment>) {
         this.comments.apply {
             clear()
             addAll(comments)
-            notifyItemRangeInserted(0, comments.size)
+            notifyDataSetChanged()
         }
     }
 

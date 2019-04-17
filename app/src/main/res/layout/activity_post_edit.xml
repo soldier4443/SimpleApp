@@ -1,88 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:background="@color/colorSurface">
-
-  <androidx.appcompat.widget.Toolbar
-    android:id="@+id/post_edit_toolbar"
-    android:layout_width="0dp"
-    android:layout_height="?attr/actionBarSize"
-    android:background="?attr/colorPrimary"
-    android:elevation="4dp"
-    android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-    app:title="@string/text_title_post_edit" />
-
+<layout>
+  <data>
+    <variable
+      name="vm"
+      type="com.turastory.simpleapp.ui.edit.EditPostViewModel" />
+  </data>
   <androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="0dp"
-    android:layout_height="0dp"
-    android:padding="@dimen/margin_basic"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/post_edit_toolbar">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorSurface">
 
-    <TextView
-      android:id="@+id/post_edit_title_label"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="title"
-      android:textSize="16sp"
-      android:textStyle="bold"
-      app:layout_constraintLeft_toLeftOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-      android:id="@+id/post_edit_title"
+    <androidx.appcompat.widget.Toolbar
+      android:id="@+id/post_edit_toolbar"
       android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="4dp"
-      android:background="@color/colorSurface"
-      android:textSize="20sp"
+      android:layout_height="?attr/actionBarSize"
+      android:background="?attr/colorPrimary"
+      android:elevation="4dp"
+      android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintRight_toRightOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/post_edit_title_label"
-      tools:text="Hello WorldHello WorldHello WorldHello WorldHello World" />
+      app:layout_constraintTop_toTopOf="parent"
+      app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+      app:title="@string/text_title_post_edit" />
 
-    <!--<View-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="1dp"-->
-    <!--android:background="@color/colorTextLight"-->
-    <!--app:layout_constraintBottom_toTopOf="@+id/post_edit_body"-->
-    <!--app:layout_constraintTop_toBottomOf="@+id/post_edit_title" />-->
-
-    <TextView
-      android:id="@+id/post_edit_body_label"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/margin_basic"
-      android:text="body"
-      android:textSize="16sp"
-      android:textStyle="bold"
-      app:layout_constraintLeft_toLeftOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/post_edit_title" />
-
-    <EditText
-      android:id="@+id/post_edit_body"
+    <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="0dp"
       android:layout_height="0dp"
-      android:layout_marginTop="4dp"
-      android:background="@color/colorSurface"
-      android:gravity="top"
-      android:textSize="16sp"
+      android:padding="@dimen/margin_basic"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintRight_toRightOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/post_edit_body_label"
-      tools:text="sadjnandkskadnjksa" />
+      app:layout_constraintTop_toBottomOf="@+id/post_edit_toolbar">
+
+      <TextView
+        android:id="@+id/post_edit_title_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="title"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+      <EditText
+        android:id="@+id/post_edit_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:background="@color/colorSurface"
+        android:text="@={vm.postTitle}"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/post_edit_title_label"
+        tools:text="Hello WorldHello WorldHello WorldHello WorldHello World" />
+
+      <!--<View-->
+      <!--android:layout_width="match_parent"-->
+      <!--android:layout_height="1dp"-->
+      <!--android:background="@color/colorTextLight"-->
+      <!--app:layout_constraintBottom_toTopOf="@+id/post_edit_body"-->
+      <!--app:layout_constraintTop_toBottomOf="@+id/post_edit_title" />-->
+
+      <TextView
+        android:id="@+id/post_edit_body_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_basic"
+        android:text="body"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/post_edit_title" />
+
+      <EditText
+        android:id="@+id/post_edit_body"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/colorSurface"
+        android:gravity="top"
+        android:text="@={vm.postBody}"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/post_edit_body_label"
+        tools:text="sadjnandkskadnjksa" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
   </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

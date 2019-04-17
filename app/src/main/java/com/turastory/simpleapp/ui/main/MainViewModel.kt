@@ -56,23 +56,23 @@ class MainViewModel @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread())
             .doOnNext {
                 // 매 번 스트림이 발생할 때마다 상태를 변경하는 게 맞음
-                _state.value = NetworkState.LOADING
+                _state.postValue(NetworkState.LOADING)
             }
             .subscribe({ posts ->
                 if (posts.size > 0) {
-                    _posts.value = posts
-                    _state.value = NetworkState.LOADED
+                    _posts.postValue(posts)
+                    _state.postValue(NetworkState.LOADED)
                 }
             }, {
-                _state.value = NetworkState.error(it)
+                _state.postValue(NetworkState.error(it))
             })
     }
 
     fun clickPostItem(post: Post) {
-        _navigateToDetails.value = Event(post.id)
+        _navigateToDetails.postValue(Event(post.id))
     }
 
     fun notifyPostDeleted(postId: Int) {
-        _showDeleteCompleteToast.value = Event(postId)
+        _showDeleteCompleteToast.postValue(Event(postId))
     }
 }

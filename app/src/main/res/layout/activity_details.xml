@@ -1,103 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:background="@color/colorSurface"
-  tools:context=".ui.details.DetailsActivity">
-
-  <androidx.appcompat.widget.Toolbar
-    android:id="@+id/details_toolbar"
-    android:layout_width="0dp"
-    android:layout_height="?attr/actionBarSize"
-    android:background="?attr/colorPrimary"
-    android:elevation="4dp"
-    android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-    app:title="@string/text_title_post_details" />
-
-  <androidx.core.widget.NestedScrollView
-    android:layout_width="0dp"
-    android:layout_height="0dp"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/details_toolbar">
-
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="vertical"
-      android:padding="@dimen/margin_basic">
-
-      <TextView
-        android:id="@+id/post_details_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        tools:text="nesciunt iure omnis dolorem tempora et accusantium" />
-
-      <TextView
-        android:id="@+id/post_details_body"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_half"
-        android:textSize="16sp"
-        tools:text="Sample Text Sample Text Sample Text Sample Text Sample Text Sample Text Sample Text Sample Text Sample Text" />
-
-      <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="@dimen/margin_basic"
-        android:background="@color/colorTextLight" />
-
-      <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_basic"
-        android:text="@string/text_comments"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-      <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/comments_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_half"
-        android:clipToPadding="false"
-        android:nestedScrollingEnabled="false"
-        tools:listitem="@layout/layout_comment" />
-
-    </LinearLayout>
-
-  </androidx.core.widget.NestedScrollView>
-
-  <LinearLayout
-    android:id="@+id/loading_page"
+<layout>
+  <data>
+    <variable
+      name="vm"
+      type="com.turastory.simpleapp.ui.details.DetailsViewModel" />
+  </data>
+  <androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorSurface"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:visibility="visible"
-    tools:visibility="invisible">
+    tools:context=".ui.details.DetailsActivity">
 
-    <ProgressBar
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content" />
+    <androidx.appcompat.widget.Toolbar
+      android:id="@+id/details_toolbar"
+      android:layout_width="0dp"
+      android:layout_height="?attr/actionBarSize"
+      android:background="?attr/colorPrimary"
+      android:elevation="4dp"
+      android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+      app:title="@string/text_title_post_details" />
 
-    <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/margin_half"
-      android:text="@string/text_loading" />
+    <androidx.core.widget.NestedScrollView
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/details_toolbar">
 
-  </LinearLayout>
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/margin_basic">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+          android:id="@+id/post_details_title"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@{vm.postTitle}"
+          android:textSize="20sp"
+          android:textStyle="bold"
+          tools:text="nesciunt iure omnis dolorem tempora et accusantium" />
+
+        <TextView
+          android:id="@+id/post_details_body"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/margin_half"
+          android:text="@{vm.postBody}"
+          android:textSize="16sp"
+          tools:text="Sample Text Sample Text Sample Text Sample Text Sample Text Sample Text Sample Text Sample Text Sample Text" />
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_marginTop="@dimen/margin_basic"
+          android:background="@color/colorTextLight" />
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/margin_basic"
+          android:text="@string/text_comments"
+          android:textSize="18sp"
+          android:textStyle="bold" />
+
+        <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/comments_list"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/margin_half"
+          android:clipToPadding="false"
+          android:nestedScrollingEnabled="false"
+          app:items="@{vm.comments}"
+          tools:listitem="@layout/layout_comment" />
+
+      </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+      android:id="@+id/loading_page"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@color/colorSurface"
+      android:gravity="center"
+      android:orientation="vertical"
+      android:visibility="visible"
+      tools:visibility="invisible">
+
+      <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_half"
+        android:text="@string/text_loading" />
+
+    </LinearLayout>
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.turastory.simpleapp.R
 import com.turastory.simpleapp.base.BaseActivity
 import com.turastory.simpleapp.data.source.State
+import com.turastory.simpleapp.databinding.ActivityDetailsBinding
 import com.turastory.simpleapp.ext.*
 import com.turastory.simpleapp.ui.edit.EditPostActivity
-import com.turastory.simpleapp.vo.Comment
 import com.turastory.simpleapp.vo.Post
 import kotlinx.android.synthetic.main.activity_details.*
 import javax.inject.Inject
@@ -33,18 +33,29 @@ class DetailsActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_details)
+        val binding = bind<ActivityDetailsBinding>(R.layout.activity_details)
+        binding.vm = vm
+        binding.lifecycleOwner = this
 
         val postId = intent.getIntExtra("postId", -1)
 
         if (postId != -1) {
             setupToolbar()
+            setupRecyclerView()
             loadPostDetails(postId)
             setupDialog()
             setupNavigation()
         } else {
             toast("Error occurred!")
             finish()
+        }
+    }
+
+    private fun setupRecyclerView() {
+        comments_list.apply {
+            adapter = commentAdapter
+            layoutManager = LinearLayoutManager(this@DetailsActivity)
+            setHasFixedSize(true)
         }
     }
 
@@ -60,35 +71,12 @@ class DetailsActivity : BaseActivity() {
     private fun loadPostDetails(postId: Int) {
         vm.initPostId(postId)
 
-        observe(vm.postDetails) { post ->
-            showPostDetails(post)
-        }
-
-        observe(vm.comments) { comments ->
-            showComments(comments)
-        }
-
         observe(vm.state) { networkState ->
             when (networkState.state) {
                 State.LOADING -> showLoadingPage()
                 State.LOADED -> hideLoadingPage()
                 State.FAILED -> hideLoadingPage()
             }
-        }
-    }
-
-    private fun showPostDetails(post: Post) {
-        post_details_title.text = post.title
-        post_details_body.text = post.body
-    }
-
-    private fun showComments(comments: List<Comment>) {
-        comments_list.apply {
-            adapter = commentAdapter
-            layoutManager = LinearLayoutManager(this@DetailsActivity)
-            setHasFixedSize(true)
-
-            commentAdapter.setComments(comments)
         }
     }
 

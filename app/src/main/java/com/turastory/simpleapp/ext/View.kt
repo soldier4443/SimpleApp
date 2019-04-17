@@ -1,11 +1,13 @@
 package com.turastory.simpleapp.ext
 
 import android.app.Activity
-import androidx.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.LayoutRes
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 
 /**
  * Kotlin extension functions
@@ -25,3 +27,6 @@ fun View.show() {
 fun View.hide(gone: Boolean = false) {
     this.visibility = if (gone) View.GONE else View.INVISIBLE
 }
+
+fun <T : ViewDataBinding> Activity.bind(@LayoutRes layoutId: Int): T =
+    DataBindingUtil.setContentView(this, layoutId)
